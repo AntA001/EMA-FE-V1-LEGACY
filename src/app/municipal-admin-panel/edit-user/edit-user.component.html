@@ -1,0 +1,80 @@
+<h1 class="title">Edit Profile</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="box-responsive">
+    <form [formGroup]="userForm" (ngSubmit)="userUpdation(userForm)" #f="ngForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label class="mb-0">First Name <span class="mendatory">*</span></label>
+                        <input formControlName="firstName" class="form-control mt-0" placeholder="Enter First Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.firstName, f)" class="errors">
+                            <p *ngIf="g.firstName.errors?.required">First Name is required</p>
+                            <p *ngIf="g.firstName.errors?.maxlength">Maximum {{ g.firstName.errors?.maxlength.requiredLength }} charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="mb-0">Middle Name</label>
+                        <input formControlName="middleName" class="form-control mt-0" placeholder="Enter Middle Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="mb-0">Last Name <span class="mendatory">*</span></label>
+                        <input formControlName="lastName" class="form-control mt-0" placeholder="Enter Last Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.lastName, f)" class="errors">
+                            <p *ngIf="g.lastName.errors?.required">Last Name is required</p>
+                            <p *ngIf="g.lastName.errors?.maxlength">Maximum {{ g.lastName.errors?.maxlength.requiredLength }} charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="mb-0">Phone Number <span class="mendatory">*</span></label>
+                        <input formControlName="mobileNumber" class="form-control mt-0" mask="000-000-0000" placeholder="000-000-0000" [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.mobileNumber, f)" class="errors">
+                            <p *ngIf="g.mobileNumber.errors?.required">Mobile Number is required</p>
+                            <p *ngIf="g.mobileNumber.errors?.maxlength">Maximum {{ g.mobileNumber.errors?.maxlength.requiredLength }} charaters</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="photo_upload">
+                    <label>
+                        <input type="file" id="thubnail-file" (change)="openThumbnailModal($event, thumbnailModal)" />
+                        <div class="upload_photo" (click)="browseThumbnailImage()">
+                            <label class="custom-file-upload" *ngIf="thumbnailImage === ''">
+                                <!-- <img [defaultImage]="spinnerSVG" [lazyLoad]="this.ds.userProfileImageUrl(user.instructor.id)" alt="Image Not Found" border-radius="10%" /> -->
+                                <img [src]="this.ds.userProfileImageUrl(user.instructor.id) + '?q=' + this.user.updated_at || 'assets/images/icon-img.png'" alt="Image Not Found" border-radius="10%" />
+                            </label>
+                            <img class="thumbnail-image" *ngIf="thumbnailImage !== ''" [src]="thumbnailImage" border-radius="10%" />
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+                <button type="submit" class="primary lg ml-1 mr-4" [class.in-progress]="inprogress">
+                    Save
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">Choose Iamge</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="180 / 180" format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="secondary lg" (click)="thumbnailModalRef.hide()">Cancel</button>
+        <button type="button" class="primary lg" (click)="cropComplete()">Save</button>
+    </div>
+</ng-template>

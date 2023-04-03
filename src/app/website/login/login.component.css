@@ -1,0 +1,164 @@
+.signin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f3f8ff;
+    min-height: 450px;
+    height: calc(100vh - 65px);
+}
+.logo-section {
+    display: flex;
+    justify-content: center;
+    padding: 22px 0 0 0;
+}
+.logo-section img {
+    width: 15%;
+}
+.signin-section {
+    width: 30%;
+    margin: 5% auto 0;
+}
+.signin-inner {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    width: 30%;
+    margin: auto;
+}
+.signin-heading {
+    text-align: center;
+}
+.signin-heading img {
+    width: 165px;
+}
+.signin-heading .title {
+    color: #343a40;
+    font-size: 30px;
+    margin: 0 0 5px 0;
+}
+.signin-heading .title-desc {
+    font-size: 15px;
+}
+.socia-login-buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 0 30px 10px 30px;
+}
+.email-wrapper,
+.password-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 15px 0;
+}
+.email-wrapper label,
+.password-wrapper label {
+    font-weight: 400;
+}
+button.login {
+    width: 100%;
+    margin: 0;
+    background-color: var(--ap-primary);
+    color: #fff;
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+.forgot-wrapper {
+    margin: 0 0 15px 0;
+}
+a.forgot-pass {
+    color: #343a40;
+    text-decoration: none;
+    font-weight: 400;
+}
+.new-account-wrapper p {
+    margin: 0;
+    text-align: center;
+    color: #343a40;
+    text-decoration: none;
+    font-weight: 400;
+    padding: 12px 0 0 0;
+}
+
+.button-container button {
+    padding: 6px 12px;
+}
+.facebook-btn {
+    background-color: #3b5998;
+    color: #fff;
+    margin-right: 6px;
+}
+.google-btn {
+    background-color: #dd4b39;
+    color: white;
+}
+
+input.form-control {
+    height: 48px;
+    border-radius: 6px;
+    background-color: #fff !important;
+    font-size: 0.9rem;
+}
+input.form-control:focus {
+    box-shadow: none;
+    outline: none;
+    border: 2px solid #343a40;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    box-shadow: 0 0 0 30px white inset !important;
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    font-size: 0.9rem;
+}
+input:-webkit-autofill {
+    -webkit-text-fill-color: #343a40 !important;
+}
+
+@media only screen and (max-width: 1024px) {
+    .signin-inner {
+        width: 50%;
+    }
+    .logo-section img {
+        width: 18%;
+    }
+    .signin-section {
+        width: 40%;
+    }
+    .socia-login-buttons {
+        padding-left: 0;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .logo-section img {
+        width: 22%;
+    }
+    .signin-section {
+        width: 100%;
+    }
+    .signin-inner {
+        width: 70%;
+    }
+}
+@media only screen and (max-width: 425px) {
+    .signin-inner {
+        width: 100%;
+    }
+    .logo-section img {
+        width: 50%;
+    }
+    .signin-section {
+        width: 85%;
+    }
+    .reg-img-wrapper img {
+        width: 100%;
+    }
+    .banner-text {
+        bottom: 0;
+        left: 0;
+    }
+}

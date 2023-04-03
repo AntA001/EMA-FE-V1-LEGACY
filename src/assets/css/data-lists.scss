@@ -1,0 +1,40 @@
+.back-office-panel {
+    .header-section {
+        position: sticky;
+        top: 55px;
+    }
+    .results-section {
+        height: calc(100vh - 185px);
+        overflow: auto;
+
+        .table-responsive {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 0 0 10px 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+    }
+    .main-row {
+        margin: 0px;
+    }
+    h6.sort {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #484848;
+    }
+    .search-seaction {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .per-page {
+            width: 100px;
+        }
+
+        .buttons {
+            text-align: right;
+        }
+    }
+}

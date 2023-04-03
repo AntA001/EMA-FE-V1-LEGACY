@@ -1,0 +1,206 @@
+<h1 class="title">{{lang.title}}</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>{{lang.news}}</label>
+        <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+            (ngModelChange)="searchKeywordChange($event)" placeholder="{{lang.placeholderNews}}" />
+    </div>
+    <div class="col d-flex justify-content-between align-items-end">
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                class="secondary" (click)="filters.page = 1; search()">
+                {{lang.search}}
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <button *ngIf="api.checkPermission('news-add')" type="button" class="primary"
+            (click)="openModal(editUser, -1)">{{lang.addNews}}</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <!-- <th>Sr. # </th> -->
+                <th>{{lang.titleEn}}</th>
+                <th>{{lang.descEn}}</th>
+                <th>{{lang.titleNative}}</th>
+                <th>{{lang.descNative}}</th>
+                <th>{{lang.publishedBy}}</th>
+                <th>{{lang.printDate}}</th>
+                <th>{{ lang.lastUpdatedBy }}</th>
+                <th>{{ lang.lastUpdate}}</th>
+
+                <th *ngIf="api.checkPermission('news-status-update')" class="text-center" style="width: 250px;">
+                    {{lang.action}}</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+        <tbody *ngIf="newsList.length > 0 && api.checkPermission('news-list')">
+            <tr *ngFor="let d of newsList | filter:searchKeyword; let i = index">
+                <td><img class="thumbnail-image" [defaultImage]="spinnerSVG"
+                        [lazyLoad]="ds.newsImageUrl1(d._id, d.updatedAt)" /></td>
+
+                <!-- <td>
+                    <div class="news-img-wrapper"><img [src]="d.image? d?.image : 'assets/images/no-image.jpg'" alt="news image" /></div>
+                </td> -->
+                <!-- <td>{{ (i+1) }} </td> -->
+                <td>{{ d.titleEN }}</td>
+                <td>
+                    <app-read-more [text]="d.descriptionEN" [maxLength]="50"></app-read-more>
+                </td>
+                <td>{{ d.titleAL }}</td>
+                <td>
+                    <app-read-more [text]="d.descriptionAL" [maxLength]="50"></app-read-more>
+                </td>
+                <td width="200px">
+                    <p>
+                        {{d.publisher?.name}}
+                        <br />
+                        {{ d.publisher?.email}}
+                    </p>
+                </td>
+                <td>{{this.getDifference(d.createdAt)}}</td>
+                <td>{{ d?.lastUpdatedBy?.email }}</td>
+                <td>{{ this.getDifference(d.updatedAt)}}</td>
+                <td class="d-flex justify-content-center align-items-center">
+                    <div *ngIf="api.checkPermission('news-edit')" class="pl-1">
+                        <button class="sm info" type="button" (click)="openModal(editUser, i)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+
+                    <div *ngIf="api.checkPermission('news-delete')" class="pl-1">
+                        <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && newsList.length === 0">
+            <tr>
+                <td colspan="8">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+
+<ng-template #editUser>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="newsForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <div class="photo_upload">
+                        <label>
+                            <input type="file" id="thubnail-file"
+                                (change)="openThumbnailModal($event, thumbnailModal)" />
+                            <div class="upload_photo cg " (click)="browseThumbnailImage()">
+                                <label class="custom-file-upload" *ngIf="thumbnailImage === ''">
+                                    <img [defaultImage]="spinnerSVG"
+                                        [lazyLoad]="ds.newsImageUrl1(this.ds.newsId,this.ds.newsUpdated)"
+                                        alt="Image Not Found" border-radius="10%" />
+                                </label>
+                                <img class="thumbnail-image" *ngIf="thumbnailImage !== ''" [src]="thumbnailImage"
+                                    border-radius="10%" />
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">{{lang.titleEn}} <span class="mendatory">*</span></label>
+                    <input type="text" formControlName="titleEN" class="form-control mt-0"
+                        placeholder="{{lang.placeholder}}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.titleEN, f)" class="errors">
+                        <p *ngIf="g.titleEN.errors?.required">{{lang.titleENRequired}}</p>
+                        <p *ngIf="g.titleEN.errors?.maxLength">Maximum {{ g.titleEN.errors?.maxlength.requiredLength }}
+                            charaters</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">{{lang.titleNative}} <span class="mendatory">*</span></label>
+                    <input type="text" formControlName="titleAL" class="form-control mt-0"
+                        placeholder="{{lang.placeholder}}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.titleAL, f)" class="errors">
+                        <p *ngIf="g.titleAL.errors?.required">{{lang.titleALRequired}}</p>
+                        <p *ngIf="g.titleAL.errors?.maxLength">Maximum {{ g.titleAL.errors?.maxlength.requiredLength }}
+                            charaters</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">{{lang.descEn}} <span class="mendatory">*</span></label>
+                    <textarea formControlName="descriptionEN" cols="20" rows="5" class="form-control mt-0"
+                        placeholder="{{lang.placeDesc}}" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+                    <!-- <input type="text" formControlName="description" class="form-control mt-0" placeholder="Enter Description" [ngClass]="{ 'form-submitted': f.submitted }" /> -->
+                    <div *ngIf="ui.checkErrors(g.descriptionEN, f)" class="errors">
+                        <p *ngIf="g.descriptionEN.errors?.required">{{lang.descENRequired}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">{{lang.descNative}} <span class="mendatory">*</span></label>
+                    <textarea formControlName="descriptionAL" cols="20" rows="5" class="form-control mt-0"
+                        placeholder="{{lang.placeDesc}}" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+                    <!-- <input type="text" formControlName="description" class="form-control mt-0" placeholder="Enter Description" [ngClass]="{ 'form-submitted': f.submitted }" /> -->
+                    <div *ngIf="ui.checkErrors(g.descriptionAL, f)" class="errors">
+                        <p *ngIf="g.descriptionAL.errors?.required">{{lang.descALRequired}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                {{lang.save}}
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class="warning ml-1" (click)="cancelRegionButton(f)">{{lang.cancel}}</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>{{lang.msg}}</h4>
+        <button type="button" class="dark" (click)="modalRef.hide()">{{lang.no}}</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-1"
+            (click)="delete()">
+            {{lang.yes}}
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">{{ lang.chooseImage}}</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="16 / 9"
+            format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="primary lg-1" (click)="cropComplete()">Save</button>
+        <button type="button" class="warning lg-1" (click)="thumbnailModalRef.hide()">Cancel</button>
+
+    </div>
+</ng-template>

@@ -1,0 +1,198 @@
+<h3 class="title">{{ this.breadName }} Guide Article</h3>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="box-responsive">
+    <form [formGroup]="guideArticleForm" (ngSubmit)="save(f)" #f="ngForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title EN <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleEN" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleEN, f)" class="errors">
+                            <p *ngIf="g.titleEN.errors?.required">Title EN is required</p>
+                            <p *ngIf="g.titleEN.errors?.maxLength">Maximum {{ g.titleEN.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title AL <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleAL" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleAL, f)" class="errors">
+                            <p *ngIf="g.titleAL.errors?.required">Title AL is required</p>
+                            <p *ngIf="g.titleAL.errors?.maxLength">Maximum {{ g.titleAL.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title EL <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleEL" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleEL, f)" class="errors">
+                            <p *ngIf="g.titleEL.errors?.required">Title EL is required</p>
+                            <p *ngIf="g.titleEL.errors?.maxLength">Maximum {{ g.titleEL.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title MK <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleMK" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleMK, f)" class="errors">
+                            <p *ngIf="g.titleMK.errors?.required">Title EL is required</p>
+                            <p *ngIf="g.titleMK.errors?.maxLength">Maximum {{ g.titleMK.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title BG <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleBG" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleBG, f)" class="errors">
+                            <p *ngIf="g.titleBG.errors?.required">Title EL is required</p>
+                            <p *ngIf="g.titleBG.errors?.maxLength">Maximum {{ g.titleBG.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Description EN <span class="mendatory">*</span></label>
+                        <textarea formControlName="descriptionEN" cols="20" rows="3" class="form-control mt-0"
+                            placeholder="Enter Description" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+
+                        <div *ngIf="ui.checkErrors(g.descriptionEN, f)" class="errors">
+                            <p *ngIf="g.descriptionEN.errors?.required">Description EN is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Description AL <span class="mendatory">*</span></label>
+                        <textarea formControlName="descriptionAL" cols="20" rows="3" class="form-control mt-0"
+                            placeholder="Enter Description" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+                        <div *ngIf="ui.checkErrors(g.descriptionAL, f)" class="errors">
+                            <p *ngIf="g.descriptionAL.errors?.required">Description AL is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Description EL <span class="mendatory">*</span></label>
+                        <textarea formControlName="descriptionEL" cols="20" rows="3" class="form-control mt-0"
+                            placeholder="Enter Description" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+                        <div *ngIf="ui.checkErrors(g.descriptionEL, f)" class="errors">
+                            <p *ngIf="g.descriptionEL.errors?.required">Description EL is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Description MK <span class="mendatory">*</span></label>
+                        <textarea formControlName="descriptionMK" cols="20" rows="3" class="form-control mt-0"
+                            placeholder="Enter Description" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+                        <div *ngIf="ui.checkErrors(g.descriptionMK, f)" class="errors">
+                            <p *ngIf="g.descriptionMK.errors?.required">Description MK is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Description BG <span class="mendatory">*</span></label>
+                        <textarea formControlName="descriptionBG" cols="20" rows="3" class="form-control mt-0"
+                            placeholder="Enter Description" [ngClass]="{'form-submitted': f.submitted}"></textarea>
+                        <div *ngIf="ui.checkErrors(g.descriptionBG, f)" class="errors">
+                            <p *ngIf="g.descriptionBG.errors?.required">Description BG is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                    </div>
+                    <div class="col-md-12 article-height">
+                        <label class="mb-">Article EN<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="articleEN" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                        <div *ngIf="ui.checkErrors(g.articleEN, f)" class="errors">
+                            <p *ngIf="g.articleEN.errors?.required">Article EN is required</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 article-height" style="margin-top: 115px;">
+                        <label class="mb-">Article AL<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="articleAL" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                        <div *ngIf="ui.checkErrors(g.articleAL, f)" class="errors">
+                            <p *ngIf="g.articleAL.errors?.required">Article AL is required</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 article-height" style="margin-top: 115px;">
+                        <label class="mb-">Article EL<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="articleEL" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                        <div *ngIf="ui.checkErrors(g.articleEL, f)" class="errors">
+                            <p *ngIf="g.articleEL.errors?.required">Article EL is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 article-height" style="margin-top: 115px;">
+                        <label class="mb-">Article MK<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="articleMK" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                        <div *ngIf="ui.checkErrors(g.articleMK, f)" class="errors">
+                            <p *ngIf="g.articleMK.errors?.required">Article MK is required</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 article-height" style="margin-top: 115px;">
+                        <label class="mb-">Article BG<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="articleBG" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                        <div *ngIf="ui.checkErrors(g.articleBG, f)" class="errors">
+                            <p *ngIf="g.articleBG.errors?.required">Article BG is required</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="photo_upload">
+                    <label>
+                        <input type="file" id="thubnail-file"
+                            (change)="openThumbnailModal($event, thumbnailModal)" />
+                        <div class="upload_photo cg " (click)="browseThumbnailImage()">
+                            <label class="custom-file-upload" *ngIf="thumbnailImage === ''">
+                                <img [defaultImage]="spinnerSVG"
+                                    [lazyLoad]="ds.newsImageUrl(this.ds.guideId,this.ds.newsUpdated)"
+                                    alt="Image Not Found" border-radius="10%" />
+                            </label>
+                            <img class="thumbnail-image" *ngIf="thumbnailImage !== ''" [src]="thumbnailImage"
+                                border-radius="10%" />
+                        </div>
+                    </label>
+                </div>
+                <div class="col-12 d-flex justify-content-end pr-5">
+                    <button type="button" (click)="cancel()" class="warning lg">Cancel</button>
+                    <button type="submit" class="primary lg ml-1" [disabled]="waiting.save"
+                        [ngClass]="{ 'in-progress': waiting.save }">
+                        Save
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">Choose Image</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="16 / 9"
+            format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="warning lg" (click)="thumbnailModalRef.hide()">Cancel</button>
+        <button type="button" class="primary lg" (click)="cropComplete()">Save</button>
+    </div>
+</ng-template>

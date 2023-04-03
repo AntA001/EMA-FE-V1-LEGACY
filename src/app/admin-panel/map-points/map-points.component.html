@@ -1,0 +1,265 @@
+<h1 class="title">Map Points</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="">
+    <div class="row">
+        <div class="col">
+            <label>Title</label>
+            <!-- <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter keyword to Search" /> -->
+            <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchKeywordChange($event)" placeholder="Enter Title to Search" />
+        </div>
+         <div class="col-md-3 cg-input-group">
+            <label>Country</label>
+            <select class="cg" [(ngModel)]="country" (change)="getMunicipality($event)">
+            <option value='' [disabled]="true">Select Country</option>
+            <option *ngFor="let ct of countryList" [value]="ct._id">{{ct.nameEN}}</option>
+        </select>
+        </div>
+        <div class="col-md-3 cg-input-group">
+            <label>Municiplity</label>
+            <select class="form-control mt-0" [(ngModel)]="filters.municipality">
+                <option value='' [disabled]="true">Select Municiplity</option>
+                <option *ngFor="let mt of municipalityList" [value]="mt._id">{{mt.nameEN}}</option>
+            </select>
+        </div>
+
+        <div class="col d-flex justify-content-between align-items-end">
+            <div class="btn-group" dropdown>
+                <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                    class="secondary" (click)="filters.page = 1; search()">
+                    Search
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <button type="button" class="secondary" (click)="openModal(addContact,-1)">Add New Point</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Native Name</th>
+                    <th>Address</th>
+                    <th>Native Address</th>
+                    <th>Municiplity</th>
+                    <th>Status</th>
+                    <th class="text-center" style="width: 250px;">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+            <tbody *ngIf="mapPointsList.length > 0">
+                <tr *ngFor="let d of mapPointsList ; let i = index">
+                    <td>{{ d.nameEN }}</td>
+                    <td>{{ d.nameAL }}</td>
+                    <td>
+                        <app-read-more [text]="d.addressEN" [maxLength]="40"></app-read-more>
+                    </td>
+                    <td>
+                        <app-read-more [text]="d.addressAL" [maxLength]="40"></app-read-more>
+                    </td>
+                    <td>{{ d.municipality.nameEN }}</td>
+                    <td>
+                        <div *ngIf="d.status === 'inactive'" class="i-badge sm warning">inactive</div>
+                        <div *ngIf="d.status === 'active'" class="i-badge sm success">active</div>
+
+                    </td>
+                    <td class="d-flex justify-content-center align-items-center">
+                        <div class="pl-1">
+                            <button class="sm info" type="button" (click)="openModal(addContact,i)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        <div class="pl-1">
+                            <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel,i)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="pl-1">
+                            <button *ngIf="d.status == 'inactive'" type="button" class=" status-btn success "
+                                (click)="statusConfirmingModal(changeStatusActive,d._id,i,'active')"
+                                style="width: 110px;">Activate</button>
+                        </div>
+                        <div class="pl-1">
+                            <button *ngIf="d.status == 'active'" type="button" class=" status-btn danger"
+                                (click)="statusConfirmingModal(changeStatusDeactive,d._id,i,'inactive')"
+                                style="width: 110px;">Deactivate</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="dataStatus === 'done' && mapPointsList.length === 0">
+                <tr>
+                    <td colspan="9">
+                        <app-no-data-found></app-no-data-found>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+</div>
+
+<ng-template #addContact>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="mapPointForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Name<span class="mendatory">*</span></label>
+                    <input type="text" formControlName="nameEN" class="form-control mt-0" placeholder="Enter Name "
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.nameEN, f)" class="errors">
+                        <p *ngIf="g.nameEN.errors?.required">Name is required</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Native Name</label>
+                    <input type="text" formControlName="nameAL" class="form-control mt-0"
+                        placeholder="Enter Native Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.nameAL, f)" class="errors">
+                        <p *ngIf="g.nameAL.errors?.required">Native Name is required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Enter Address<span class="mendatory">*</span></label>
+                    <input type="text" formControlName="addressEN" class="form-control mt-0" placeholder="Enter Address"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.addressEN, f)" class="errors">
+                        <p *ngIf="g.addressEN.errors?.required">Address EN is required</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Enter Native Address</label>
+                    <input type="text" formControlName="addressAL" class="form-control mt-0"
+                        placeholder="Enter Native Address" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.addressAL, f)" class="errors">
+                        <p *ngIf="g.addressAL.errors?.required">Native Address is required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0"> lat <span class="mendatory">*</span></label>
+                    <input type="number" formControlName="lat" class="form-control mt-0" placeholder="Enter lat "
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.lat, f)" class="errors">
+                        <p *ngIf="g.lat.errors?.required">lat is required</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">lng <span class="mendatory">*</span></label>
+                    <input type="number" formControlName="lng" class="form-control mt-0" placeholder="Enter lng"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.lng, f)" class="errors">
+                        <p *ngIf="g.lng.errors?.required">lng is required</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Country <span class="mendatory">*</span></label>
+                    <select class="cg" formControlName="country_id" (change)="getMunicipality($event)"
+                        [ngClass]="{'form-submitted': f.submitted}">
+                        <option value='null' [disabled]="true">Select Country</option>
+                        <option *ngFor="let ct of countryList" [value]="ct._id">{{ct.nameEN}}</option>
+                    </select>
+                    <div *ngIf="ui.checkErrors(g.country_id, f)" class="errors">
+                        <p *ngIf="g.country_id.errors?.required">Country is required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Municiplity<span class="mendatory">*</span></label>
+                    <select class="form-control mt-0" formControlName="municipality_id"
+                        (change)="getLocationCategory($event)" [ngClass]="{'form-submitted': f.submitted}">
+                        <option value='null' [disabled]="true">Select Municiplity</option>
+                        <option *ngFor="let mt of municipalityList" [value]="mt._id">{{mt.nameEN}}</option>
+                    </select>
+                    <div *ngIf="ui.checkErrors(g.municipality_id, f)" class="errors">
+                        <p *ngIf="g.municipality_id.errors?.required">Municiplityis required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Location Category<span class="mendatory">*</span></label>
+                    <select class="form-control mt-0" formControlName="category_id"
+                        [ngClass]="{'form-submitted': f.submitted}">
+                        <option value='null' [disabled]="true">Select Location Category</option>
+                        <option *ngFor="let lc of locationCategoryList" [value]="lc._id">{{lc.nameEN}}</option>
+                    </select>
+                    <div *ngIf="ui.checkErrors(g.category_id, f)" class="errors">
+                        <p *ngIf="g.category_id.errors?.required">Category is required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Phone No.<span class="mendatory">*</span></label>
+                    <input formControlName="phoneNo" class="form-control mt-0" placeholder="Enter Phone Number"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.phoneNo, f)" class="errors">
+                        <p *ngIf="g.phoneNo.errors?.required">Phone number is required</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                Save
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class=" warning ml-1" (click)="cancelButton(f)">Cancel</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>Do you want to Delete?</h4>
+        <button type="button" class="danger " (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="primary ml-1"
+            (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #changeStatusActive>
+    <div class="modal-body text-center">
+        <h2 class="primary">Confirmation</h2>
+        <h4>Are you sure that you want change the status to active?</h4>
+        <button type="button" class="danger sm " (click)="modalRef.hide()">No</button>
+        <button type="button" class=" primary sm ml-1" (click)="changeStatusAct()"
+            [disabled]="waiting.userStatus[this.selectedIndex]"
+            [ngClass]="waiting.userStatus[this.selectedIndex]?'in-progress':''">
+            <div class="loading-dots">Yes
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+</ng-template>
+<ng-template #changeStatusDeactive>
+    <div class="modal-body text-center">
+        <h2 class="primary">Confirmation</h2>
+        <h4>Are you sure that you want change the status to inactive?</h4>
+        <button type="button" class=" danger sm btn-mr" (click)="modalRef.hide()">No</button>
+        <button type="button" class=" primary sm ml-1" (click)="changeStatusInact()"
+            [disabled]="waiting.userStatus[this.selectedIndex]"
+            [ngClass]="waiting.userStatus[this.selectedIndex]?'in-progress':''">
+            <div class="loading-dots">Yes
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+</ng-template>

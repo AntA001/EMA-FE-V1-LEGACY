@@ -1,0 +1,94 @@
+<h3 class="title">{{ this.breadName }} News</h3>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="box-responsive">
+    <form [formGroup]="newsForm" (ngSubmit)="save(f)" #f="ngForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title EN <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleEN" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleEN, f)" class="errors">
+                            <p *ngIf="g.titleEN.errors?.required">Title EN is required</p>
+                            <p *ngIf="g.titleEN.errors?.maxLength">Maximum {{ g.titleEN.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="mb-0">Title Native <span class="mendatory">*</span></label>
+                        <input type="text" formControlName="titleAL" class="form-control mt-0" placeholder="Enter Title"
+                            [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div *ngIf="ui.checkErrors(g.titleAL, f)" class="errors">
+                            <p *ngIf="g.titleAL.errors?.required">Title Native is required</p>
+                            <p *ngIf="g.titleAL.errors?.maxLength">Maximum {{ g.titleAL.errors?.maxlength.requiredLength
+                                }}
+                                charaters</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 article-height">
+                        <label class="mb-">Description EN<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="descriptionEN" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                            <div *ngIf="ui.checkErrors(g.descriptionEN, f)" class="errors">
+                                <p *ngIf="g.descriptionEN.errors?.required">Description EN is required</p>
+                            </div>
+                    </div>
+
+                    <div class="col-md-12 article-height" style="margin-top: 115px;">
+                        <label class="mb-">Description Native<span class="mendatory">*</span></label>
+                        <quill-editor formControlName="descriptionAL" [modules]="editorConfig"
+                            [ngClass]="{ 'form-submitted': f.submitted }"></quill-editor>
+                            <div *ngIf="ui.checkErrors(g.descriptionAL, f)" class="errors">
+                                <p *ngIf="g.descriptionAL.errors?.required">Description Native is required</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="photo_upload">
+                    <label>
+                        <input type="file" id="thubnail-file" (change)="openThumbnailModal($event, thumbnailModal)" />
+                        <div class="upload_photo" (click)="browseThumbnailImage()">
+                            <label class="custom-file-upload" *ngIf="thumbnailImage === ''">
+                                <img [defaultImage]="spinnerSVG"
+                                    [lazyLoad]="this.ds.newsImageUrl(this.ds.newsId) + '?' + newsDetail?.updated_at"
+                                    alt="Image Not Found" border-radius="10%" />
+                            </label>
+                            <img class="thumbnail-image" *ngIf="thumbnailImage !== ''" [src]="thumbnailImage"
+                                border-radius="10%" />
+                        </div>
+                    </label>
+                </div>
+                <div class="col-12 d-flex justify-content-end pr-5">
+                    <button type="button" (click)="cancel()" class="warning lg">Cancel</button>
+                    <button type="submit" class="primary lg ml-1" [disabled]="waiting.save"
+                        [ngClass]="{ 'in-progress': waiting.save }">
+                        Save
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">Choose Image</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="16 / 9"
+            format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="warning lg" (click)="thumbnailModalRef.hide()">Cancel</button>
+        <button type="button" class="primary lg" (click)="cropComplete()">Save</button>
+    </div>
+</ng-template>

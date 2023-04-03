@@ -1,0 +1,82 @@
+<h1 class="title">Contact Us Requests</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>Name</label>
+        <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter Name to Search" />
+    </div>
+    <div class="col col d-flex align-items-end">
+        <label>&nbsp;</label>
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button" class="secondary" (click)="filters.page = 1; search()">
+                Search
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th width="25%">USER DETAILS</th>
+                <th width="60%">MESSAGE</th>
+                <!-- <th>Name</th>
+                <th>Email</th>
+                <th>Phone No</th>
+                <th width="450">Message</th> -->
+                <th width="15%" class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+        <tbody *ngIf="requestList.length > 0">
+            <tr *ngFor="let d of requestList; let i = index">
+                <td>
+                    <p><label>Name:</label> {{ d.name }}</p>
+                    <p><label>Email:</label> {{ d.email }}</p>
+                    <p><label>Phone:</label> {{ d.phone }}</p>
+                </td>
+                <td>
+                    <p>{{ d.message }}</p>
+                </td>
+                <!-- <td>{{ d.name }}</td>
+                <td>{{ d.email }}</td>
+                <td>{{ d.phone }}</td>
+                <td>{{ d.message }}</td> -->
+                <td class="d-flex justify-content-center align-items-center">
+                    <div>
+                        <!-- <button *ngIf="d.status === 'active'" type="button" class="sm status-btn danger" (click)="inactiveUser(i)">Deactivate</button>
+                        <button *ngIf="d.status === 'inactive'" type="button" class="sm status-btn success" (click)="activeUser(i)">Activate</button> -->
+                        <button *ngIf="d.status === 1" type="button" class="sm status-btn danger w-100" (click)="markAsUnRead(i)">Mrak as Unread</button>
+                        <button *ngIf="d.status === 0" type="button" class="sm status-btn success mt-2 w-100" (click)="markAsRead(i)">Mrak as Read</button>
+                    </div>
+                    <!-- <div class="pl-1">
+                        <button class="sm info" type="button" (click)="openModal(editUser, i)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+
+                    <div class="pl-1">
+                        <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div> -->
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && requestList.length === 0">
+            <tr>
+                <td colspan="3">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination>

@@ -1,0 +1,27 @@
+.registration-container {
+    /* height: 100vh; */
+    /* background: url(/assets/images/O7KlZIGA.png) no-repeat; */
+    background-size: 100% 100%;
+    padding: 150px 0px 0 0;
+}
+.registration-box {
+    background-color: #eee;
+    margin: 0px auto;
+    width: 70%;
+}
+.registration-box .top-bar {
+    padding: 1px;
+}
+.registration-box .top-bar p {
+    background-color: #3a6f7c;
+    color: #fff;
+    padding: 6px 0px;
+    font-size: 18px;
+}
+.successfully-registered {
+    padding: 3%;
+    text-align: center;
+}
+.successfully-registered h2 {
+    font-size: 16px;
+}

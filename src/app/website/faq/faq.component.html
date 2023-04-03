@@ -1,0 +1,37 @@
+<!--   Main Content Start Here   -->
+<main>
+    <section class="default_holder">
+        <div class="container">
+            <p class="top-message">{{ lang.heading }}</p>
+            <div class="second-message one ql-container ql-snow" style="border-width: 0">
+                <div class="ql-editor" [innerHTML]="transformHtml(contents)"></div>
+            </div>
+
+            <app-component-loader *ngIf="loadingStatus"></app-component-loader>
+            <div class="default_content">
+                <ng-container *ngFor="let cat of faqData; let i = index">
+                    <div class="q-box-heading">
+                        <h2 class="text-left">{{ cat.nameEn }}</h2>
+                        <div class="text-right">
+                            <p class="expand-collapse" (click)="expandAll(i)">{{ lang.expand }}</p>
+                            <div class="space"></div>
+                            <p class="expand-collapse" (click)="collapseAll(i)">{{ lang.collapse }}</p>
+                        </div>
+                    </div>
+
+                    <ng-container *ngFor="let q of cat.faq; let i = index">
+                        <div class="question-div" (click)="q.collapse = !q.collapse" [attr.aria-expanded]="!q.collapse" aria-controls="collapseBasic">
+                            <span>{{ q.questionEn }}</span>
+                            <i class="fas fa-angle-right"></i>
+                        </div>
+
+                        <div [class]="q.collapse == true ? 'answer-div hide' : 'answer-div show'">
+                            <div class="well well-lg card card-block card-header">{{ q.answerEn }}</div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </div>
+    </section>
+</main>
+<!--   Main Content End Here   -->

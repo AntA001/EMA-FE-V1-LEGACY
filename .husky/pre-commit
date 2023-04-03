@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+echo '[Checking Code Formatting]'
+#npm run pretty-quick
+echo '[Checking JS Rules]'
+#npm run tslint

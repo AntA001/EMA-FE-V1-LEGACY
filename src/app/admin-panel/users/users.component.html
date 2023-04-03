@@ -1,0 +1,210 @@
+<h1 class="title">Users</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>Name</label>
+        <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter Name to Search" />
+    </div>
+    <div class="col">
+        <label>User Type</label>
+        <select class="form-control" [(ngModel)]="filters.userType">
+            <option value="">Select Any</option>
+            <option value="admin">Admin</option>
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+            <option value="deskManager">Floor Manager</option>
+        </select>
+    </div>
+    <div class="col col d-flex align-items-end">
+        <label>&nbsp;</label>
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button" class="secondary" (click)="filters.page = 1; search()">
+                Search
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>User Type</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th width="200">Address</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+        <tbody *ngIf="usersList.length > 0">
+            <tr *ngFor="let d of usersList; let i = index">
+                <td>
+                     <ng-container *ngIf="d.userType === 'student'">
+                    {{ d.student.firstName }} {{ d.student.middleName }} {{ d.student.lastName }}
+                   </ng-container>
+                   <ng-container *ngIf="d.userType === 'instructor'">
+                     {{ d.instructor.firstName }} {{ d.instructor.middleName }} {{ d.instructor.lastName }}
+                   </ng-container></td>
+                   <ng-container *ngIf="d.userType === 'deskmanager'">
+                    {{ d.deskmanager.firstName }} {{ d.deskmanager.middleName }} {{ d.deskmanager.lastName }}
+                  </ng-container>
+                  <ng-container *ngIf="d.userType === 'admin'">
+                    {{ d.admin.firstName }} {{ d.admin.middleName }} {{ d.admin.lastName }}
+                  </ng-container>
+                <td>
+                    <div class="i-badge secondary" *ngIf="d.userType === 'admin'" type="button">Admin</div>
+                    <div class="i-badge info" *ngIf="d.userType === 'student'" type="button">Student</div>
+                    <div class="i-badge danger" *ngIf="d.userType === 'instructor'" type="button">Instructor</div>
+                    <div class="i-badge warning" *ngIf="d.userType === 'deskmanager'" type="button">Floor Manager</div>
+                </td>
+                <td>{{ d.email }}</td>
+                <td>
+                    <ng-container *ngIf="d.userType === 'student'">
+                        {{ d.student.phoneNumber }}
+                       </ng-container>
+                       <ng-container *ngIf="d.userType === 'instructor'">
+                         {{ d.instructor.mobileNumber }}
+                       </ng-container>
+                       <ng-container *ngIf="d.userType === 'deskmanager'">
+                        {{ d.deskmanager.homePhone }}
+                      </ng-container>
+                      <ng-container *ngIf="d.userType === 'admin'">
+                        {{ d.admin.homePhone }}
+                      </ng-container>
+                </td>
+                <td>{{ d[d.userType]?.address }}</td>
+                <td class="d-flex justify-content-center align-items-center">
+                    <div>
+                        <button *ngIf="d.status === 'active'" type="button" class="sm status-btn danger" (click)="inactiveUser(i)">Deactivate</button>
+                        <button *ngIf="d.status === 'inactive'" type="button" class="sm status-btn success" (click)="activeUser(i)">Activate</button>
+                    </div>
+                    <div class="pl-1">
+                        <button class="sm info" type="button" (click)="openModal(editUser, i)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+
+                    <div class="pl-1">
+                        <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && usersList.length === 0">
+            <tr>
+                <td colspan="6">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination>
+
+<ng-template #editUser>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">Manage User</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="userForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">First Name <span class="mendatory">*</span></label>
+                    <input formControlName="firstName" class="form-control mt-0" placeholder="Enter First Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.firstName, f)" class="errors">
+                        <p *ngIf="g.firstName.errors?.required">First Name is required</p>
+                        <p *ngIf="g.firstName.errors?.maxlength">Maximum {{ g.firstName.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Last Name <span class="mendatory">*</span></label>
+                    <input formControlName="lastName" class="form-control mt-0" placeholder="Enter Last Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.lastName, f)" class="errors">
+                        <p *ngIf="g.lastName.errors?.required">Last Name is required</p>
+                        <p *ngIf="g.lastName.errors?.maxlength">Maximum {{ g.lastName.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Email <span class="mendatory">*</span></label>
+                    <input formControlName="email" [readonly]="true" class="form-control mt-0" placeholder="Enter Email" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.email, f)" class="errors">
+                        <p *ngIf="g.email.errors?.required">Email is required</p>
+                        <p *ngIf="g.email.errors?.email">Please enter valid email</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">User Type <span class="mendatory">*</span></label>
+                    <select formControlName="userType" class="form-control mt-0" [ngClass]="{ 'form-submitted': f.submitted }">
+                        <option value="null">Select Any</option>
+                        <option value="admin">Admin</option>
+                        <option value="customer">Customer</option>
+                    </select>
+                    <div *ngIf="ui.checkErrors(g.userType, f)" class="errors">
+                        <p *ngIf="g.userType.errors?.required">User Type is required</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Primary Contact <span class="mendatory">*</span></label>
+                    <input formControlName="contactOne" class="form-control mt-0" placeholder="Enter Primary Contact" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.contactOne, f)" class="errors">
+                        <p *ngIf="g.contactOne.errors?.required">Primary Contact is required</p>
+                        <p *ngIf="g.contactOne.errors?.maxlength">Maximum {{ g.contactOne.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Secondary Contact</label>
+                    <input formControlName="contactTwo" class="form-control mt-0" placeholder="Enter Secondary Contact" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.contactTwo, f)" class="errors">
+                        <p *ngIf="g.contactTwo.errors?.required">Secondary Contact is required</p>
+                        <p *ngIf="g.contactTwo.errors?.maxlength">Maximum {{ g.contactTwo.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">Address</label>
+                    <input formControlName="address" class="form-control mt-0" placeholder="Enter Address" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.address, f)" class="errors">
+                        <p *ngIf="g.address.errors?.required">Address is required</p>
+                        <p *ngIf="g.address.errors?.maxlength">Maximum {{ g.address.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                Save
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class="secondary ml-1" (click)="cancelRegionButton(f)">Cancel</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <p>Do you want to Delete?</p>
+        <button type="button" class="dark" (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-3" (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>

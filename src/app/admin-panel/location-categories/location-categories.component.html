@@ -1,0 +1,119 @@
+<h1 class="title">Location Categories</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="">
+    <div class="row">
+        <div class="col">
+            <label>Title</label>
+            <!-- <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter keyword to Search" /> -->
+            <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchKeywordChange($event)" placeholder="Enter Title to Search" />
+        </div>
+        <div class="col d-flex justify-content-between align-items-end">
+            <div class="btn-group" dropdown>
+                <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                    class="secondary" (click)="filters.page = 1; search()">
+                    Search
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <button type="button" class="secondary" (click)="openModal(addContact,-1)">Add New Location Category</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Native Name</th>
+                    <th>Status</th>
+                    <th class="text-center" style="width: 250px;">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+            <tbody *ngIf="locationCategorysList.length > 0">
+                <tr *ngFor="let d of locationCategorysList ; let i = index">
+                    <td>{{ d.nameEN }}</td>
+                    <td>{{ d.nameAL }}</td>
+                    <td>
+                        <div *ngIf="d.status === 'inactive'" class="i-badge sm warning">inactive</div>
+                        <div *ngIf="d.status === 'active'" class="i-badge sm success">active</div>
+
+                    </td>
+                    <td class="d-flex justify-content-center align-items-center">
+                        <div class="pl-1">
+                            <button class="sm info" type="button" (click)="openModal(addContact,i)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        <div class="pl-1">
+                            <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel,i)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="dataStatus === 'done' && locationCategorysList.length === 0">
+                <tr>
+                    <td colspan="5">
+                        <app-no-data-found></app-no-data-found>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+</div>
+
+<ng-template #addContact>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="locationCategoryForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Name<span class="mendatory">*</span></label>
+                    <input type="text" formControlName="nameEN" class="form-control mt-0" placeholder="Enter Name"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.nameEN, f)" class="errors">
+                        <p *ngIf="g.nameEN.errors?.required">Name EN is required</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Native Name </label>
+                    <input type="text" formControlName="nameAL" class="form-control mt-0" placeholder="Enter Native Name"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+            </div>
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                Save
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class=" warning ml-1" (click)="cancelButton(f)">Cancel</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>Do you want to Delete?</h4>
+        <button type="button" class="danger " (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="primary ml-1"
+            (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>

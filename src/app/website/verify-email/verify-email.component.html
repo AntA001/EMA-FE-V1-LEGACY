@@ -1,0 +1,28 @@
+<div class="registration-container">
+    <div class="registration-box">
+        <div class="top-bar">
+            <p class="text-center">{{lang.verifyStatus}}</p>
+        </div>
+        <div class="successfully-registered" *ngIf="codeStatus === 'inProgress'">
+            <h2>{{lang.verifyingYou}}</h2>
+        </div>
+        <div class="successfully-registered" *ngIf="codeStatus === 'valid'">
+            <h1>{{lang.emailVerified}}</h1>
+            <h4>{{lang.redirectDashboard}}</h4>
+        </div>
+
+        <div class="successfully-registered" *ngIf="codeStatus === 'expire'">
+            <h2 style="text-transform: none;">{{lang.verifyingExpire}}<br>
+                {{lang.please}} <a style="cursor: pointer;color: #3a6f7c; font-weight: 600;" class="lr-txt-secondary" (click)="resendCode()">{{lang.clickHere}}</a> {{lang.newOne}}</h2>
+        </div>
+
+        <div class="successfully-registered" *ngIf="codeStatus === 'resent'">
+            <h2 style="text-transform: none;">{{lang.codeResent}} <br>
+                {{lang.checkEmail}}</h2>
+        </div>
+        <div class="successfully-registered" *ngIf="codeStatus === 'invalidCode'">
+            <h2 style="text-transform: none;">{{lang.UnableToVerify}} <br>
+            </h2>
+        </div>
+    </div>
+</div>

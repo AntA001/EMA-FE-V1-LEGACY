@@ -1,0 +1,229 @@
+.dashboard-main-container {
+    padding: 15px;
+    background-color: var(--ap-surface-secondary);
+    color: var(--ap-primary);
+}
+section.dashboard-section {
+    background-color: var(--ap-primary);
+    border-radius: 10px;
+}
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px 25px 10px 30px;
+}
+
+.dash-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+}
+.dash-text .text-name {
+    margin: 0;
+    font-size: 18px;
+}
+.dash-text .text-date {
+    margin: 0;
+}
+span.dash-name {
+    font-weight: 500;
+    font-size: 20px;
+}
+span.dash-date {
+    font-weight: 600;
+    margin: 0 0 0 10px;
+}
+.dash-img-wrapper img {
+    border-radius: 15%;
+    width: 15%;
+}
+.dash-img-wrapper {
+    display: contents;
+}
+.card [class*="card-header-"] .card-icon,
+.card [class*="card-header-"] .card-text {
+    border-radius: 3px;
+    /* background-color: #999; */
+    padding: 15px;
+    margin-top: -20px;
+    margin-right: 15px;
+    float: left;
+    width: 56px;
+    height: 56px;
+    text-align: center;
+}
+.card {
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+}
+.card {
+    border: 0;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-radius: 6px;
+    color: var(--ap-primary);
+    background: #fff !important;
+    width: 100%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0;
+}
+.wfc .card-header {
+    text-align: right;
+}
+.wfc .card-header {
+    text-align: right;
+}
+.wfc .card-category {
+    font-size: 12px;
+}
+.wfc .card-title {
+    font-size: 30px;
+}
+.wfc .card-state {
+    width: 56px;
+    height: 56px;
+}
+.nav.nav-tabs li {
+    padding: 11px;
+    background: #dee2e6;
+    margin-right: 3px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.nav.nav-tabs li.active {
+    background: var(--ap-secondary);
+}
+.nav.nav-tabs li.active a {
+    color: #fff;
+}
+
+.digits {
+    font-size: 30px;
+}
+.side-bar {
+    background-color: var(--ap-secondary);
+    width: 6px;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.text-insight {
+    padding-top: 15px;
+    padding-bottom: 25px;
+    margin: 5px 0;
+    font-size: 18px;
+}
+.user-data-titles {
+    font-size: 15px;
+}
+
+/* notification START */
+.noti-text h1 {
+    padding: 45px 0 25px 0;
+}
+.noti-content-inner {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.nc-info-content,
+.nc-warning-content,
+.nc-success-content {
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px 15px;
+    position: relative;
+    box-shadow: 0px 0px 25px 0 rgb(0 0 0 / 10%);
+}
+.nc-info,
+.nc-warning,
+.nc-success {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.info-side-bar,
+.warning-side-bar,
+.success-side-bar {
+    width: 5px;
+    border-radius: 5px;
+}
+.info-side-bar {
+    background-color: var(--ap-info);
+}
+.warning-side-bar {
+    background-color: var(--ap-warning);
+}
+.success-side-bar {
+    background-color: var(--ap-success);
+}
+.info-icon i,
+.warning-icon i,
+.success-icon i {
+    font-size: 30px;
+    padding: 0 15px;
+}
+.info-icon i {
+    color: var(--ap-info);
+}
+.warning-icon i {
+    color: var(--ap-warning);
+}
+.success-icon i {
+    color: var(--ap-success);
+}
+.delete-icon i {
+    color: var(--ap-danger);
+    font-size: 22px;
+    padding: 0 15px;
+    width: 100%;
+}
+.info-data,
+.warning-data,
+.success-data {
+    padding: 15px 0;
+}
+.info-data h1,
+.warning-data h1,
+.success-data h1 {
+    color: #000;
+    font-size: 16px;
+}
+.info-data p,
+.warning-data p,
+.success-data p {
+    margin: 0;
+    color: #95979b;
+}
+/* notification END */
+
+@media only screen and (max-width: 1024px) {
+    .nc-info-content,
+    .nc-warning-content,
+    .nc-success-content {
+        width: 48%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .nc-info-content,
+    .nc-warning-content,
+    .nc-success-content {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 425px) {
+    .nc-info,
+    .nc-warning,
+    .nc-success {
+        flex-direction: column;
+    }
+    .info-data,
+    .warning-data,
+    .success-data {
+        padding: 15px;
+        text-align: center;
+    }
+}

@@ -1,0 +1,57 @@
+<h1 class="title">Settings</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="box-responsive">
+    <form [formGroup]="settingForm" (ngSubmit)="save(f)" #f="ngForm">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="mb-0">Makeup Class Color <span class="mendatory">*</span></label>
+                        <div class="color-picker">
+                            <input formControlName="makeupClassColor" type="text" class="form-control mt-3" placeholder="Enter Color" [ngClass]="{'form-submitted': f.submitted}" />
+                            <div *ngIf="ui.checkErrors(g.makeupClassColor, f)" class="errors">
+                                <p *ngIf="g.makeupClassColor.errors?.required">Makeup Class Color is required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div id="picker"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="mb-0">Blocked Slots Color <span class="mendatory">*</span></label>
+                        <div class="color-picker">
+                            <input formControlName="blockedSlotColor" type="text" class="form-control mt-3" placeholder="Enter Color" [ngClass]="{'form-submitted': f.submitted}" />
+                            <div *ngIf="ui.checkErrors(g.blockedSlotColor, f)" class="errors">
+                                <p *ngIf="g.blockedSlotColor.errors?.required">Blocked Slots Color is required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div id="blockeSlotpicker"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+                <button type="submit" class="primary lg ml-1" [disabled]="waiting.save"
+                    [ngClass]="{ 'in-progress': waiting.save }">
+                    Save
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

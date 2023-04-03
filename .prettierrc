@@ -1,0 +1,23 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "singleQuote": true,
+    "printWidth": 3000,
+    "bracketSpacing": true,
+    "semi": false,
+    "trailingComma": "none",
+    "overrides": [
+        {
+            "files": ["*.ts", "*.css", "*.scss"],
+            "options": {
+                "printWidth": 100
+            }
+        },
+        {
+            "files": ["*.html"],
+            "options": {
+                "printWidth": 3000
+            }
+        }
+    ]
+}

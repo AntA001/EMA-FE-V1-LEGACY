@@ -1,0 +1,16 @@
+.table-responsive {
+    height: calc(100vh - 240px);
+}
+.ql-omega {
+    width: 100%;
+    background: #fff !important;
+    color: #000;
+}
+.ql-omega:hover {
+    background: var(--ap-secondary) !important;
+    color: #fff;
+}
+.button-menu ul {
+    overflow-x: auto;
+    height: 353px;
+}

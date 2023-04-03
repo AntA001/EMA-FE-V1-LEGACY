@@ -1,0 +1,49 @@
+<div class="signin-container">
+    <div class="signin-inner">
+        <div class="signin-heading">
+            <img class="logo" src="assets/images/ema.png" alt="" />
+            <h1 class="title">{{lang.signIn}}</h1>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm)" #f="ngForm">
+            <div class="input-container">
+                <!-- <div class="d-flex socia-login-buttons">
+                    <button type="button" class="facebook-btn" (click)="facebookLogin()"><i class="fa fa-facebook fa-fw"></i> {{ lang.facebook }}</button>
+                    <button type="button" class="google-btn" (click)="googleLogin()"><i class="fa fa-google fa-fw"></i> {{ lang.google }}</button>
+                </div> -->
+                <div class="email-wrapper">
+                    <label>{{ lang.email }} / Username </label>
+                    <input type="text" formControlName="youremail" class="email form-control mt-0" placeholder="{{ lang.example }}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.youremail, f)" class="errors">
+                        <p *ngIf="g.youremail.errors?.required">{{ lang.emailReq }}</p>
+                        <!-- <p *ngIf="g.youremail.errors?.email">{{ lang.emailValid }}</p> -->
+                    </div>
+                </div>
+            </div>
+            <div class="input-container">
+                <div class="password-wrapper">
+                    <label>{{ lang.password }} </label>
+                    <input type="password" formControlName="yourpassword" class="password form-control mt-0" placeholder="{{ lang.enterPassword }}" [ngClass]="{ 'form-submitted': f.submitted }" name="yourword" />
+                    <div *ngIf="ui.checkErrors(g.yourpassword, f)" class="errors">
+                        <p *ngIf="g.yourpassword.errors?.required">{{ lang.passwordReq }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forgot-wrapper">
+                <a [routerLink]="['/forgot-password']" routerLinkActive="router-link-active" class="forgot-pass">{{ lang.forgotPassword }}</a>
+            </div>
+            <div class="btn-wrapper">
+                <button [disabled]="loginLoading" class="login" [ngClass]="loginLoading ? 'in-progress' : ''">
+                    {{ lang.signIn }}
+                    <div class="loading-dots"><span></span><span></span><span></span></div>
+                </button>
+            </div>
+
+            <!-- <div class="btn-wrapper">
+                <p>
+                    {{ lang.noAccount }} <a [routerLink]="['/registration']" routerLinkActive="router-link-active">{{ lang.signUp }}</a>
+                </p>
+                <a [routerLink]="['/forgot-password']" routerLinkActive="router-link-active" class="forgotten">{{ lang.forgottenYourPassword }}</a>
+            </div> -->
+        </form>
+    </div>
+</div>

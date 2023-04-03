@@ -1,0 +1,63 @@
+<h1 class="title">Messages</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="">
+    <div class="row">
+        <div class="col">
+            <label>Title</label>
+            <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter keyword to Search" />
+        </div>
+        <div class="col d-flex justify-content-between align-items-end">
+            <div class="btn-group" dropdown>
+                <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button" class="secondary" (click)="filters.page = 1; search()">
+                    Search
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th width="120">Message Title</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+            <tbody *ngIf="messagesList.length > 0">
+                <tr *ngFor="let d of messagesList; let i = index">
+                    <td>{{ d.messageTitle }}</td>
+                    <td [innerHTML]="this.messagesList[i].messageBody">{{ d.messageBody }}</td>
+                    <td>
+                        <div class="i-badge success" *ngIf="d.status === 'read'" type="button">Read</div>
+                        <div class="i-badge danger" *ngIf="d.status === 'unread'" type="button">Unread</div>
+                    </td>
+                    <td>
+                        <div>
+                            <button *ngIf="d.status === 'read'" type="button" class="sm status-btn danger" (click)="unreadMessage(i)">Unread</button>
+                            <button *ngIf="d.status === 'unread'" type="button" class="sm status-btn success" (click)="readMessage(i)">Read</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tbody *ngIf="dataStatus === 'done' && messagesList.length === 0">
+                <tr>
+                    <td colspan="4">
+                        <app-no-data-found></app-no-data-found>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination>
+</div>

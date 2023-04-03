@@ -1,0 +1,50 @@
+<div class="dashboard-main-container">
+    <section class="dashboard-section">
+        <div class="dashboard-container">
+            <div class="dash-text">
+                <p class="text-name">
+                    {{lang.hi}} <span class="dash-name">{{ api.user.name }}!</span>
+                </p>
+                <p class="text-date">
+                    {{lang.lastLogin}}:
+                    <ng-container *ngIf="api.user.lastLogin === null; else lastLoginTemp">
+                        <span class="dash-date" style="letter-spacing: 1px">First Time Login</span>
+                    </ng-container>
+                    <ng-template #lastLoginTemp>
+                        <span class="dash-date">{{this.getDifference(api.user.lastLogin)}}</span>
+                    </ng-template>
+                </p>
+            </div>
+            <div class="dash-img-wrapper"><img src="assets/images/ema.png" alt="" /></div>
+        </div>
+    </section>
+
+    <h1 class="text-insight">{{lang.insights}}</h1>
+    <div class="row">
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ this.max }}</span>
+                <p class="user-data-titles">{{lang.maximunSMSCount}}</p>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ this.smsCount }}</span>
+                <p class="user-data-titles">{{lang.sMSCount}}</p>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{this.remaining}}</span>
+                <p class="user-data-titles">{{lang.remainingSMSCount}}</p>
+            </div>
+        </div>
+    </div>
+</div>

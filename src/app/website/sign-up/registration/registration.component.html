@@ -1,0 +1,141 @@
+<div class="signin-container">
+    <div class="signin-inner">
+        <div class="signin-heading">
+            <h1 class="title">Welcome!</h1>
+            <p class="title-desc">Sign Up your account</p>
+        </div>
+        <form (ngSubmit)="register()" [formGroup]="regForm" #f="ngForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form_group">
+                        <label>{{ lang.email }} <span>*</span></label>
+                        <input type="text" class="form-control cg-input" placeholder="{{ lang.emailExample }}" formControlName="email" [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div class="errors" *ngIf="ui.checkErrors(g.email, f)">
+                            <p *ngIf="g.email.errors?.required">{{ lang.email }} {{ lang.isRequire }}</p>
+                            <p *ngIf="g.email.errors?.email">{{ lang.enterValidEmail }}</p>
+                            <p *ngIf="g.email.errors?.maxlength">{{ lang.MaxChar }} {{ g.email.errors?.maxlength.requiredLength }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form_group">
+                        <label>{{ lang.fName }} <span>*</span></label>
+                        <input type="text" class="form-control cg-input" formControlName="firstName" placeholder="{{ lang.fName }}" />
+                        <div class="errors" *ngIf="ui.checkErrors(g.firstName, f)">
+                            <p *ngIf="g.firstName.errors?.required">{{ lang.fName }} {{ lang.isRequire }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form_group">
+                        <label>{{ lang.lName }} <span>*</span></label>
+                        <input type="text" class="form-control cg-input" formControlName="lastName" placeholder="{{ lang.lName }}" />
+                        <div class="errors" *ngIf="ui.checkErrors(g.lastName, f)">
+                            <p *ngIf="g.lastName.errors?.required">{{ lang.lName }} {{ lang.isRequire }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form_group">
+                        <label>{{ lang.phoneNum }} <span>*</span></label>
+                        <input type="text" class="form-control cg-input" placeholder="{{ lang.phoneNum }}" formControlName="contactOne" [ngClass]="{ 'form-submitted': f.submitted }" />
+                        <div class="errors" *ngIf="ui.checkErrors(g.contactOne, f)">
+                            <p *ngIf="g.contactOne.errors?.maxlength">{{ lang.MaxChar }} {{ g.contactOne.errors?.maxlength.requiredLength }}</p>
+                            <p *ngIf="g.contactOne.errors?.required">{{ lang.phoneNum }} {{ lang.isRequire }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form_group">
+                        <label>{{ lang.dob }} </label>
+                        <input class="form-control mt-0 cg-input" type="text" formControlName="dob" bsDatepicker [bsConfig]="{ dateInputFormat: this.cs.DATE_TIME_FORMAT.SYN_DATE, adaptivePosition: true, showWeekNumbers: false }" placeholder="{{ lang.SelectDob }}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form_group">
+                        <label>{{ lang.pass }} <span>*</span></label>
+                        <input type="password" class="form-control cg-input" placeholder="********" formControlName="password" />
+                        <div class="errors" *ngIf="ui.checkErrors(g.password, f)">
+                            <p *ngIf="g.password.errors?.required">{{ lang.pass }} {{ lang.isRequire }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form_group">
+                        <label>{{ lang.confPass }} <span>*</span></label>
+                        <input type="password" class="form-control cg-input" placeholder="********" formControlName="password_confirmation" />
+                        <div class="errors" *ngIf="ui.checkErrors(g.password_confirmation, f)">
+                            <p *ngIf="g.password_confirmation.errors?.required">{{ lang.confPass }} {{ lang.isRequire }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-12">
+                    <label>Preferred Language </label>
+                    <div class="row radio">
+                        <div class="col-md-6">
+                            <div class="form_group">
+                                <input class="form-check-input" type="radio" value="en" formControlName="preffered_language" checked />
+                                <label class="form-check-label">English</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form_group">
+                                <input class="form-check-input" value="no" type="radio" formControlName="preffered_language" checked />
+                                <label class="form-check-label">Norwegian</label>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="col-md-12">
+                    <div class="form_group">
+                        <label>{{ lang.address }}</label>
+                        <input type="text" class="form-control cg-input" placeholder="{{ lang.placeholderAddress }}" formControlName="address" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label>{{ lang.gender }}</label>
+                    <div class="row radio">
+                        <div class="col-md-6">
+                            <div class="form_group">
+                                <input class="form-check-input" type="radio" value="male" formControlName="gender" checked />
+                                <label class="form-check-label">{{ lang.male }}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form_group">
+                                <input class="form-check-input" value="female" type="radio" formControlName="gender" checked />
+                                <label class="form-check-label">{{ lang.female }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_terms">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" (change)="agree()" />
+                        <label class="form-check-label" for="flexCheckDefault"> {{ lang.agree }}</label>
+                        <a [routerLink]="['/terms-and-conditions']" routerLinkActive="router-link-active" target="_blank">{{ lang.termCondition }}</a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button class="login" type="submit" [ngClass]="loginLoading ? 'in-progress' : ''">
+                        {{ lang.signUp }}
+                        <div class="loading-dots"><span></span><span></span><span></span></div>
+                    </button>
+                </div>
+                <div class="col-md-12">
+                    <a routerLink="/login"
+                        >{{ lang.haveAccount }} <span>{{ lang.login }}</span></a
+                    >
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

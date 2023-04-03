@@ -1,0 +1,189 @@
+<h1 class="title">{{lang.title}}</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="">
+    <div class="row">
+        <div class="col">
+            <label>{{lang.labelTitle}}</label>
+            <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchKeywordChange($event)" placeholder="{{lang.placeholder}}" />
+        </div>
+        <div class="col d-flex justify-content-between align-items-end">
+            <div class="btn-group" dropdown>
+                <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                    class="secondary" (click)="filters.page = 1; search()">
+                    {{lang.search}}
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <button *ngIf="api.checkPermission('useful-contacts-add')" type="button" class="secondary" (click)="addContactModal(addContact,-1)">{{lang.addUseful}}</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>{{lang.titleEn}}</th>
+                    <th>{{lang.titleNative}}</th>
+                    <th>{{lang.contact}}</th>
+                    <th>{{lang.contactCate}}</th>
+
+                    <th class="text-center" style="width: 250px;">{{lang.action}}</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+            <tbody *ngIf="contactList.length > 0 && api.checkPermission('useful-contacts-list')">
+                <tr *ngFor="let d of contactList | filter:searchKeyword; let i = index">
+                    <!-- <td><img class="thumbnail-image" [defaultImage]="spinnerSVG" [lazyLoad]="ds.contactImageUrl(d._id) + '?' + d.updatedAt" /></td> -->
+                    <!-- <td>
+                        <div class="news-img-wrapper"><img [src]="d.image? d?.image : 'assets/images/no-image.jpg'" alt="Contact image" /></div>
+                    </td> -->
+                    <td>{{ d.titleEN }}</td>
+                    <td>{{ d.titleAL }}</td>
+                    <td>{{ d.contact }}</td>
+                    <td *ngIf="ts.currentLang === 'al'">{{ d.category.nameAL }}</td>
+                    <td *ngIf="ts.currentLang === 'en'">{{ d.category.nameEN }}</td>
+                    <td *ngIf="ts.currentLang === 'gr'">{{ d.category.nameEL }}</td>
+                    <td *ngIf="ts.currentLang === 'bg'">{{ d.category.nameBG }}</td>
+                    <td *ngIf="ts.currentLang === 'mk'">{{ d.category.nameMK }}</td>
+                    <td class="d-flex justify-content-center align-items-center">
+                        <div *ngIf="api.checkPermission('useful-contacts-edit')" class="pl-1">
+                            <button class="sm info" type="button" (click)="addContactModal(addContact,d._id)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="api.checkPermission('useful-contacts-delete')" class="pl-1">
+                            <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel,d._id)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="dataStatus === 'done' && contactList.length === 0">
+                <tr>
+                    <td colspan="5">
+                        <app-no-data-found></app-no-data-found>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+</div>
+
+<ng-template #addContact>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="contactForm" (ngSubmit)="saveContact(f)" #f="ngForm">
+            <div class="row">
+                <!-- <div class="col-md-12 mb-2">
+                    <label class="mb-0">Image<span class="mendatory">*</span></label>
+                    <div class="photo_upload">
+                        <label>
+                            <input type="file" id="thubnail-file" (change)="openThumbnailModal($event, thumbnailModal)" />
+                            <div class="upload_photo" (click)="browseThumbnailImage()">
+                                <label class="custom-file-upload" *ngIf="thumbnailImage === ''">
+                                    <img [defaultImage]="spinnerSVG" [lazyLoad]="ds.contactImageUrl(this.ds.contactId) + '?' + this.ds.contactUpdated" alt="Image Not Found" border-radius="10%" />
+                                </label>
+                                <img class="thumbnail-image" *ngIf="thumbnailImage !== ''" [src]="thumbnailImage" border-radius="10%" />
+                            </div>
+                        </label>
+                    </div>
+                </div> -->
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">{{lang.titleEn}} <span class="mendatory">*</span></label>
+                    <input formControlName="titleEN" class="form-control mt-0" placeholder="{{lang.placeholder}}"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.titleEN, f)" class="errors">
+                        <p *ngIf="g.titleEN.errors?.required">{{lang.titleENRequired}}</p>
+                        <p *ngIf="g.titleEN.errors?.maxlength">Maximum {{ g.titleEN.errors?.maxlength.requiredLength }}
+                            charaters</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">{{lang.titleNative}} <span class="mendatory">*</span></label>
+                    <input formControlName="titleAL" class="form-control mt-0" placeholder="{{lang.placeholder}}"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.titleAL, f)" class="errors">
+                        <p *ngIf="g.titleAL.errors?.required">{{lang.titleALRequired}}</p>
+                        <p *ngIf="g.titleAL.errors?.maxlength">Maximum {{ g.titleAL.errors?.maxlength.requiredLength }}
+                            charaters</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-5">
+                    <label class="mb-0">{{lang.contact}}#<span class="mendatory">*</span></label>
+                    <input formControlName="contact" class="form-control mt-0" placeholder="{{lang.placeContact}}"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.contact, f)" class="errors">
+                        <p *ngIf="g.contact.errors?.required">{{lang.contactRequired}}</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-5">
+                    <label class="mb-0">{{lang.contactCate}}<span class="mendatory">*</span></label>
+                    <select class="form-control mt-0" formControlName="categoryId"
+                        [ngClass]="{'form-submitted': f.submitted}">
+                        <!--<option value='null' [disabled]="true">Select Category</option>-->
+                        <option value="">{{lang.placeCate}}</option>
+                        <option *ngFor="let ct of categoriesList" value="{{ct._id}}">
+                            <p *ngIf="ts.currentLang === 'al'">{{ct.nameAL}}</p>
+                            <p *ngIf="ts.currentLang === 'en'">{{ct.nameEN}}</p>
+                            <p *ngIf="ts.currentLang === 'gr'">{{ct.nameEL}}</p>
+                            <p *ngIf="ts.currentLang === 'bg'">{{ct.nameBG}}</p>
+                            <p *ngIf="ts.currentLang === 'mk'">{{ct.nameMK}}</p>
+                        </option>
+                    </select>
+                    <div *ngIf="ui.checkErrors(g.categoryId, f)" class="errors">
+                        <p *ngIf="g.categoryId.errors?.required">{{lang.categoryRequired}}</p>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                {{lang.save}}
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class="warning ml-1" (click)="cancelButton(f)">{{lang.cancel}}</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>{{lang.msg}}</h4>
+        <button type="button" class="dark" (click)="modalRef.hide()">{{lang.no}}</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-1"
+            (click)="delete()">
+            {{lang.yes}}
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">Choose Image</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+            format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="primary lg-1" (click)="cropComplete()">Save</button>
+        <button type="button" class="warning lg-1" (click)="thumbnailModalRef.hide()">Cancel</button>
+
+    </div>
+</ng-template>

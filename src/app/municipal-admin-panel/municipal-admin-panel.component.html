@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.bubble.css">
+<link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.snow.css">
+<div class="back-office-panel">
+    <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
+        <app-municipal-sidebar class="no-print-me"></app-municipal-sidebar>
+        <main class="page-content">
+            <app-ialerts></app-ialerts>
+            <nav class="navbar navbar-dark stick-top">
+                <button type="button" class="sidebar-toggler no-print-me" (click)="toggleSidebar()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <div class="main-option">
+                    <div class="nav-item nav-link">
+                        <select [(ngModel)]="ts.currentLang" class="lang-dropdown"
+                            (change)="api.changeLanguage(ts.currentLang); setCollapsed();">
+                            <option *ngFor="let lang of languages | keyvalue" [value]="lang.key">
+                                {{lang.key|uppercase}}&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                        </select>
+                    </div>
+                    <!-- <h4 style="color: #fafafa; margin: 0; font-size: 18px;">Couries Express</h4> -->
+                    <div class="dropdown-container">
+                        <div class="dropdown">
+                            <h4 class="drop-text"><i class="fas fa-user"></i> {{ firstName | titlecase }} <i
+                                    class="fa fa-angle-down"></i></h4>
+                            <div class="dropdown-content">
+                                <!-- <a [routerLink]="[ '/user/profile/', api.user.id]"><i class="fas fa-user"></i>View Profile</a> -->
+                                <a [routerLink]="[ 'change-password']"><i class="fas fa-key"></i>{{lang.changePassword}}</a>
+                                <hr style="margin: 0;">
+                                <a href="javascript: void(0);" (click)='logOut()'><i class="fas fa-sign-out-alt"></i>
+                                    {{lang.logout}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid">
+                <router-outlet></router-outlet>
+            </div>
+            <div class="overlay" (click)="toggleSidebar()" [ngClass]="{'show' : !getSideBarState()}"></div>
+        </main>
+    </div>
+</div>

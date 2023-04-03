@@ -1,0 +1,164 @@
+<h1 class="title">Guide Article</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>Title</label>
+        <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+            (ngModelChange)="searchKeywordChange($event)" placeholder="Enter Title to Search" />
+    </div>
+    <div class="col d-flex justify-content-between align-items-end">
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                class="secondary" (click)="filters.page = 1; search()">
+                Search
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <button type="button" class="primary"  (click)="addGuides('')">Add New Guide Article</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <!-- <th>Sr. # </th> -->
+                <th>Title EN</th>
+                <th>Title AL</th>
+                <th>Title EL</th>
+                <th>Title MK</th>
+                <th>Title BG</th>
+                <th>Status</th>
+                <th class="text-center" style="width: 250px;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+        <tbody *ngIf="guideArticleList.length > 0">
+            <tr *ngFor="let d of guideArticleList | filter:searchKeyword; let i = index">
+                <td><img class="thumbnail-image" [defaultImage]="spinnerSVG"
+                        [lazyLoad]="ds.guideImageUrl(d._id) + '?' + d.updatedAt" /></td>
+
+                <!-- <td>
+                    <div class="news-img-wrapper"><img [src]="d.image? d?.image : 'assets/images/no-image.jpg'" alt="news image" /></div>
+                </td> -->
+                <!-- <td>{{ (i+1) }} </td> -->
+                <td>{{d.titleEN}}</td>
+                <!-- <td>
+                    <app-read-more [text]="d.descriptionEN" [maxLength]="50"></app-read-more>
+                </td> -->
+                <td>{{d.titleAL}}</td>
+                <td>{{d.titleEL}}</td>
+                <td>{{d.titleMK}}</td>
+                <td>{{d.titleBG}}</td>
+
+                <!-- <td>
+                    <app-read-more [text]="d.descriptionAL" [maxLength]="50"></app-read-more>
+                </td> -->
+                <td>
+                    <div *ngIf="d.status === 'inactive'" class="i-badge sm warning">inactive</div>
+                    <div *ngIf="d.status === 'active'" class="i-badge sm success">active</div>
+
+                </td>
+                <td class="d-flex justify-content-center align-items-center">
+                    <div class="pl-1">
+                        <button class="sm info" type="button" (click)="editGuide(d._id)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+
+                    <div class="pl-1">
+                        <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="pl-1">
+                        <button *ngIf="d.status === 'inactive'" type="button" class=" status-btn success "
+                            (click)="statusConfirmingModal(changeStatusActive,d._id,i,'active')"
+                            style="width: 110px;">Activate</button>
+                    </div>
+                    <div class="pl-1">
+                        <button *ngIf="d.status === 'active'" type="button" class=" status-btn danger"
+                            (click)="statusConfirmingModal(changeStatusDeactive,d._id,i,'inactive')"
+                            style="width: 110px;">Deactivate</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && guideArticleList.length === 0">
+            <tr>
+                <td colspan="6">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>Do you want to Delete?</h4>
+        <button type="button" class="dark" (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-1"
+            (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">Choose Image</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="16 / 9"
+            format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="warning lg" (click)="thumbnailModalRef.hide()">Cancel</button>
+        <button type="button" class="primary lg" (click)="cropComplete()">Save</button>
+    </div>
+</ng-template>
+
+
+<ng-template #changeStatusActive>
+    <div class="modal-body text-center">
+        <h2 class="primary">Confirmation</h2>
+        <h4>Are you sure that you want change the status to active?</h4>
+        <button type="button" class="danger sm " (click)="modalRef.hide()">No</button>
+        <button type="button" class=" primary sm ml-1" (click)="changeStatusAct()"
+            [disabled]="waiting.userStatus[this.selectedIndex]"
+            [ngClass]="waiting.userStatus[this.selectedIndex]?'in-progress':''">
+            <div class="loading-dots">Yes
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+</ng-template>
+<ng-template #changeStatusDeactive>
+    <div class="modal-body text-center">
+        <h2 class="primary">Confirmation</h2>
+        <h4>Are you sure that you want change the status to inactive?</h4>
+        <button type="button" class=" danger sm btn-mr" (click)="modalRef.hide()">No</button>
+        <button type="button" class=" primary sm ml-1" (click)="changeStatusInact()"
+            [disabled]="waiting.userStatus[this.selectedIndex]"
+            [ngClass]="waiting.userStatus[this.selectedIndex]?'in-progress':''">
+            <div class="loading-dots">Yes
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+</ng-template>

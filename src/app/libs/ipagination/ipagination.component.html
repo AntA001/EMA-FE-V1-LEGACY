@@ -1,0 +1,44 @@
+<nav class="pagination-wrapper" [class.sameline]="sameLineLabel" #paginationContainer>
+    <ul class="pagination justify-content-left" *ngIf="currentPageLabel">
+        <li class="page-item">
+            <small>Current Page: {{ activePage }}</small>
+        </li>
+    </ul>
+
+    <ul class="pagination justify-content-left">
+        <li class="page-item" *ngIf="activePage > 1">
+            <a class="page-link" href="javascript: void(0)" tabindex="-1" (click)="changePage(activePage - 1)">Previous</a>
+        </li>
+        <li class="page-item disabled" *ngIf="activePage == 1">
+            <a class="page-link" href="javascript: void(0)" tabindex="-1">Previous</a>
+        </li>
+
+        <ng-container *ngIf="pagination.last_page <= maxButtons">
+            <li *ngFor="let p of [].constructor(pagination.last_page); let i = index" [class.active]="activePage == i + 1" class="page-item">
+                <a class="page-link" href="javascript: void(0)" (click)="changePage(i + 1)">{{ i + 1 | number: '2.0' }}</a>
+            </li>
+        </ng-container>
+
+        <ng-container *ngIf="pagination.last_page > maxButtons && maxButtons >= 3">
+            <li *ngFor="let p of getPages(); let i = index" class="page-item" [class.active]="activePage == p">
+                <a class="page-link" href="javascript: void(0)" (click)="changePage(p)">{{ p | number: '2.0' }}</a>
+            </li>
+
+            <li *ngIf="lastButton < pagination.last_page" [class.active]="activePage == lastButton" class="page-item">
+                <a class="page-link" href="javascript: void(0)" (click)="changePage(lastButton)">...</a>
+            </li>
+
+            <li *ngIf="lastButton <= pagination.last_page" [class.active]="activePage == pagination.last_page" class="page-item">
+                <a class="page-link" href="javascript: void(0)" (click)="changePage(pagination.last_page)">{{ pagination.last_page }}</a>
+            </li>
+        </ng-container>
+
+        <li class="page-item" *ngIf="activePage < pagination.last_page">
+            <a class="page-link" href="javascript: void(0)" tabindex="-1" (click)="changePage(+activePage + 1)">Next</a>
+        </li>
+
+        <li class="page-item disabled" *ngIf="activePage == pagination.last_page">
+            <a class="page-link" href="javascript: void(0)" tabindex="-1">Next</a>
+        </li>
+    </ul>
+</nav>

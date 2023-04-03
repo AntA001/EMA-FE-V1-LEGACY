@@ -1,0 +1,45 @@
+.contact-us-heading {
+    text-align: center;
+    color: var(--ap-primary);
+    font-weight: bold;
+    font-size: 40px;
+}
+.contact-us-heading-content p {
+    text-align: center;
+}
+.contact-us-heading-content,
+.contact-us-form-content {
+    width: 90%;
+    margin: 0 auto;
+}
+.contact-us-form-btn {
+    display: flex;
+    justify-content: center;
+}
+.contact-us-form-btn button {
+    padding: 10px 50px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none !important;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 4px;
+    background-color: var(--ap-secondary);
+    display: flex;
+}
+.contact-us-success {
+    text-align: center;
+    margin: 30px 0 50px;
+}
+.contact-us-success h2 {
+    color: var(--ap-primary);
+    font-weight: 500;
+    font-size: 40px;
+}
+.contact-us-success p {
+    font-size: 18px;
+}
+p{
+    color: var(--ap-primary)
+}

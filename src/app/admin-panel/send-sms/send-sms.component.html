@@ -1,0 +1,83 @@
+<h1 class="title">Send SMS</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div *ngIf="this.student === true && this.classes === false" class="col-md-6">
+        <label>Students</label>
+        <ng-select [(ngModel)]="studentIds" [multiple]="true" placeholder="Select Students">
+            <ng-option [value]="-1"> All Students</ng-option>
+            <ng-option *ngFor="let student of searchStudentList" [value]="student.id">{{ student.lastName + ',' + student.firstName }}</ng-option>
+        </ng-select>
+    </div>
+
+    <div *ngIf="this.classes === true && this.student === false" class="col-md-6">
+        <label>Classes</label>
+        <ng-select [(ngModel)]="classIds" [multiple]="true" placeholder="Select Classes">
+            <ng-option [value]="-1"> All Classes</ng-option>
+            <ng-option *ngFor="let class of classList" [value]="class.id">{{ getClassName(class) }}</ng-option>
+        </ng-select>
+    </div>
+
+    <div class="col-md-6">
+        <label>SMS Templates</label>
+        <select (change)="selectedEmailTemplete($event)">
+            <option value="null" [selected]="true">Select SMS Template</option>
+            <option [value]="emailTemps.id" *ngFor="let emailTemps of smsTempleteList">{{ emailTemps.smsSubject }}</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex align-items-end">
+        <div class="col-md-6">
+            <div class="radio-container sm">
+                <label class="radio primary">
+                    <input type="radio" value="0" name="student" [checked]="classes" (click)="classess()" />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="text">Send by Class</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="radio-container sm">
+                <label class="radio primary">
+                    <input type="radio" value="1" name="student" [checked]="student" (click)="students()" />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="text">Send by Student</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col d-flex justify-content-end align-items-end">
+        <div class="button-group mr-1">
+            <button class="post secondary">Super Seeder</button>
+            <label>
+                <div class="icon secondary post">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <input type="checkbox" />
+                <div class="button-menu secondary align-right">
+                    <ul>
+                        <li *ngFor="let item of cs.SMSSUPER_SEEDER" class="p-0">
+                            <button class="ql-omega primary" (click)="setSuperSeeder(item,'smsBody')">{{ getSuperSeederFormat(item) }}</button>
+                        </li>
+                    </ul>
+                </div>
+            </label>
+        </div>
+        <button class="primary" (click)="save()" [disabled]="saveLoading" [ngClass]="saveLoading ? 'in-progress' : ''">Send <span></span><span></span><span></span></button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <ng-container *ngIf="dataStatus === 'fetching'">
+        <div class="text-center"><img [src]="spinnerGrey50" /></div>
+    </ng-container>
+
+    <!-- <quill-editor [(ngModel)]="body" (onEditorCreated)="created($event)" [modules]="editorConfig"></quill-editor> -->
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <label>SMS Body <span class="mendatory">*</span> </label><br />
+            <textarea style="height: 100px" type="text" maxlength="500" class="desc" required rows="15" id="smsBody" [(ngModel)]="body" placeholder="Insert text here..."></textarea>
+            <span style="text-align: right; float: right;">{{body.length}}/500</span>
+        </div>
+    </div>
+</div>

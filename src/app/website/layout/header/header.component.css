@@ -1,0 +1,310 @@
+header {
+    /* position: fixed; */
+    width: 100%;
+    z-index: 1039;
+    padding: 8px;
+    /* background: #fff !important;
+    border-bottom: 1px solid #dbdbdb; */
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+.logo {
+    margin-top: -5px;
+    width: 30px;
+}
+.navbar-brand span {
+    color: #fff;
+    font-weight: 600;
+    margin-left: 20px;
+    font-size: 24px;
+}
+.navbar-brand h3{
+    font-weight: 900;
+    margin-left: 8px;
+}
+.navbar-collapse {
+    justify-content: flex-end;
+}
+/*Menu*/
+.navbar-toggler:focus {
+    outline: none;
+}
+.toggler-icon {
+    display: block;
+    background: #fff;
+    width: 30px;
+    height: 2px;
+    margin: 7px 0;
+    transition-duration: 0.3s;
+    transition-property: all;
+}
+.navbar-toggler .toggler-icon:nth-child(2) {
+    width: 20px;
+    margin: 9px 0 9px auto;
+}
+.navbar-toggler {
+    display: none;
+}
+.navbar {
+    padding: 0;
+    z-index: 9;
+}
+.navbar-nav li {
+    padding: 0 13px;
+    font-weight: 500;
+}
+.navbar-nav li a {
+    color: #383838;
+    position: relative;
+    font-size: 15px;
+}
+select {
+    font-size: 16px;
+    height: 34px;
+    border: none;
+    outline: none;
+    /* -webkit-appearance: none;
+    -moz-appearance: none; */
+    border-radius: 5px;
+    cursor: pointer; /* background: url(https://stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;/ */
+}
+.lang-dropdown {
+    margin: -5px 0 0 0;
+    padding: 8px 2px;
+    width: auto;
+}
+#navbarsExampleDefault {
+    overflow: visible;
+}
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    min-width: 6rem;
+}
+.dropdown-menu a {
+    display: block;
+    padding: 5px 15px;
+    font-size: 12px !important;
+}
+.dropdown-menu a:hover {
+    color: #d51c28;
+}
+.container-large {
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 30px;
+    position: relative;
+}
+.pointer {
+    cursor: pointer;
+}
+.active-tab a {
+    border-bottom: 4px solid green;
+}
+.navbar-nav li a:hover {
+    color: #000;
+}
+
+.navbar-nav li:last-child a {
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    background-color: var(--ap-primary);
+    font-weight: 400;
+}
+.navbar-nav li:first-child a:hover {
+    background: #6d9be9;
+    border-color: #fff;
+}
+
+.portal-btn a {
+    color: var(--isecondary) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--isecondary) !important;
+}
+.portal-btn a:hover {
+    background: var(--isecondary) !important;
+    color: var(--logo-main-blue-color) !important;
+}
+
+@media screen and (max-width: 1260px) {
+    .home-explore-btn {
+        margin-top: 5px;
+    }
+    .navbar-nav li {
+        padding: 0 12px;
+    }
+    .navbar-nav li a {
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 1199px) {
+    .navbar-toggler {
+        display: block;
+    }
+    li.nav-item {
+        margin-bottom: 10px;
+    }
+}
+@media screen and (max-width: 991px) {
+    .logo {
+        width: 130px;
+    }
+    .navbar-nav li {
+        padding: 0 8px;
+    }
+    .navbar-nav li a {
+        font-size: 14px;
+    }
+
+    .my-portal {
+        padding-left: 0px !important;
+        margin-bottom: 10px;
+    }
+    .register {
+        margin-bottom: 10px;
+    }
+}
+@media screen and (max-width: 767px) {
+    .logo {
+        width: 30px;
+    }
+    .container_large {
+        padding: 0 15px;
+    }
+    header {
+        padding: 20px 0px 15px;
+    }
+}
+.active-cart {
+    color: orange;
+}
+.search-btn {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: -3px;
+}
+.mirror-color {
+    color: #084887;
+}
+.input-search {
+    width: 80%;
+    background-color: #efefef;
+    border: solid 3px #efefef;
+    border-radius: 5px 0 0 5px;
+    padding-left: 10px;
+}
+input:focus {
+    outline: none !important;
+}
+.top-header {
+    background-color: #084887;
+    color: white;
+}
+.cart-con {
+    position: absolute;
+    z-index: 99999999;
+    top: 35px;
+    right: 255px;
+}
+.shopping-cart {
+    background: white;
+    width: 320px;
+    position: relative;
+    border-radius: 3px;
+    max-height: 400px;
+}
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    border-top: 1px solid #f0f0f0;
+}
+.linksContainer a:last-child {
+    margin-right: 8px;
+}
+.top-header .headerLinks {
+    padding: 7px 10px;
+    display: inline-block;
+}
+.top-header .headerLinks {
+    padding: 10px;
+    display: inline-block;
+}
+.top-header a {
+    color: white;
+}
+.top-header .headerLinks:hover {
+    text-decoration: none;
+    background-color: #ff5129;
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    color: #efefef;
+}
+.no-padding {
+    padding: 0px !important;
+}
+.dropdown-main {
+    height: 34px;
+    padding: 7px 22px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: black;
+    font-weight: 600;
+    border-bottom: transparent;
+
+    background: #eeeeee;
+    border-radius: 5px;
+    margin-left: 8px;
+}
+.dropdown-main:hover {
+    background-color: #afafaf;
+}
+.dropdown-menu li {
+    background-color: #fff;
+}
+.dropdown-menu li:hover {
+    background-color: #084887;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+}
+.dropdown-menu li a {
+    color: #000;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 10px 10px;
+    display: block;
+}
+.dropdown-menu li:hover a {
+    color: #fff;
+}
+.cross span:nth-child(1) {
+    transform: rotate(45deg);
+    margin: 0px 0px -11px 0px !important;
+}
+.cross span:nth-child(2) {
+    transform: rotateY(90deg);
+}
+.cross span:nth-child(3) {
+    transform: rotate(-45deg);
+    margin: -10px 0px 0px 0px !important;
+}
+.toggler-icon {
+    background-color: #383838;
+}
+.navbar-toggler {
+    padding: 0;
+}
+.navbar-toggler.collapsed.cross {
+    padding: 20px 0;
+}
+
+a.activeMenu::before {
+    width: 20px;
+    height: 10px;
+    position: absolute;
+    background-color: red;
+}

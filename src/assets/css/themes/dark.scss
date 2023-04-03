@@ -1,0 +1,48 @@
+.back-office-panel {
+    $darkStyleColors: (
+        'primary': #0d49af,
+        'secondary': #0d49af,
+        'dark': #00235e,
+        'light': #00235e,
+        'background': #1E1E1E,
+        'success': #009234,
+        'danger': #d51c28,
+        'warning': #e6a000,
+        'info': #0485a2,
+
+        'surface-secondary': #1E1E1E,
+        'main-primary': #121212,
+        'label': #fff,
+        'table': #2D2D2D,
+        'table-content': #fff,
+        'sidebar-label': #d3cecec4,
+        'table-loader': #ccc,
+
+
+        'loader1': #2D2D2D
+
+    );
+
+    @each $style, $color in $darkStyleColors {
+        --ap-#{$style}: #{$color};
+        --ap-#{$style}-red: #{red($color)};
+        --ap-#{$style}-green: #{green($color)};
+        --ap-#{$style}-blue: #{blue($color)};
+    }
+
+    // Custom Colors
+    --ap-menu-icon: #ccc
+}
+
+.website {
+    --ap-primary: #002475;
+    --ap-secondary: #638ee8;
+    --ap-dark: #222;
+    --ap-light: #333;
+
+    --ap-success: #009234;
+    --ap-danger: #d51c28;
+    /*--ap-warning: #e6a000;*/
+    --ap-warning: #FFAD00;
+    --ap-info: #0485a2;
+}

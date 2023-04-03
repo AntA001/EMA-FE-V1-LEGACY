@@ -1,0 +1,113 @@
+<h1 class="title">Faqs</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>Faq</label>
+        <input type="text" class="form-control" [(ngModel)]="filters.faq" placeholder="Enter faq to Search" />
+    </div>
+    <div class="col d-flex justify-content-between align-items-end">
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button" class="secondary" (click)="filters.page = 1; search()">
+                Search
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <button type="button" class="primary" (click)="openModal(editUser, -1)">Add New</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+        <tbody *ngIf="faqList.length > 0">
+            <tr *ngFor="let d of faqList; let i = index">
+                <td>{{ d.questionEn }}</td>
+                <td>{{ d.answerEn }}</td>
+                <td class="d-flex justify-content-center align-items-center">
+                    <div class="pl-1">
+                        <button class="sm info" type="button" (click)="openModal(editUser, i)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+
+                    <div class="pl-1">
+                        <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && faqList.length === 0">
+            <tr>
+                <td colspan="6">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination>
+
+<ng-template #editUser>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="faqForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">Question <span class="mendatory">*</span></label>
+                    <input formControlName="questionEn" class="form-control mt-0" placeholder="Enter Question" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.questionEn, f)" class="errors">
+                        <p *ngIf="g.questionEn.errors?.required">Question is required</p>
+                        <p *ngIf="g.questionEn.errors?.maxlength">Maximum {{ g.questionEn.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">Answer <span class="mendatory">*</span></label>
+                    <textarea formControlName="answerEn" class="form-control mt-0" placeholder="Enter Answer" rows="4" [ngClass]="{ 'form-submitted': f.submitted }"></textarea>
+                    <div *ngIf="ui.checkErrors(g.answerEn, f)" class="errors">
+                        <p *ngIf="g.answerEn.errors?.required">Answer is required</p>
+                        <p *ngIf="g.answerEn.errors?.maxlength">Maximum {{ g.answerEn.errors?.maxlength.requiredLength }} charaters</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                Save
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class="secondary ml-1" (click)="cancelRegionButton(f)">Cancel</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <p>Do you want to Delete?</p>
+        <button type="button" class="dark" (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-3" (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>

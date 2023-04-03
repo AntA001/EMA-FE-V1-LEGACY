@@ -1,0 +1,135 @@
+<h1 class="title">States</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>States</label>
+        <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter Name to Search" />
+    </div>
+    <div class="col d-flex justify-content-between align-items-end">
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                class="secondary" (click)="filters.page = 1; search()">
+                Search
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <button type="button" class="primary" (click)="openModal(editUser, -1)">Add New States</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>Sr. # </th>
+                <th>State Name</th>
+                <th>State Short Name</th>
+                <th>Code</th>
+                <th class="text-center" style="width: 250px;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+
+        <tbody *ngIf="stateList.length > 0">
+            <tr *ngFor="let d of stateList; let i = index">
+                <td>{{ (i+1) }} </td>
+                <td>{{ d.fullName }}</td>
+                <td>{{ d.shortName }}</td>
+                <td>{{ d.code }}</td>
+                <td class="d-flex justify-content-center align-items-center">
+                    <div class="pl-1">
+                        <button class="sm info" type="button" (click)="openModal(editUser, i)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+
+                    <div class="pl-1">
+                        <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="px-3">
+                        <span class="themeCol2">
+                            <button type="button" class="primary" (click)="showCities(d.id)">View
+                                Cities</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && stateList.length === 0">
+            <tr>
+                <td colspan="5">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)"
+    *ngIf="dataStatus === 'done'"></app-ipagination>
+
+<ng-template #editUser>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="stateForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">Full Name <span class="mendatory">*</span></label>
+                    <input type="text" formControlName="fullName" class="form-control mt-0"
+                        placeholder="Enter Full Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.fullName, f)" class="errors">
+                        <p *ngIf="g.fullName.errors?.required">Full Name is required</p>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">Short Name <span class="mendatory">*</span></label>
+                    <input type="text" formControlName="shortName" class="form-control mt-0"
+                        placeholder="Enter Short Name" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.shortName, f)" class="errors">
+                        <p *ngIf="g.shortName.errors?.required">Short Name is required</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0"> Code <span class="mendatory">*</span></label>
+                    <input type="text" class="form-control mt-0" formControlName="code" placeholder="Enter Code"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.code, f)" class="errors">
+                        <p *ngIf="g.startDate.errors?.required">Code is required</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                Save
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class="secondary ml-1" (click)="cancelRegionButton(f)">Cancel</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <p>Do you want to Delete?</p>
+        <button type="button" class="dark" (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-3"
+            (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>

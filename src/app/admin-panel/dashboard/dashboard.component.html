@@ -1,0 +1,73 @@
+<div class="dashboard-main-container">
+    <section class="dashboard-section">
+        <div class="dashboard-container">
+            <div class="dash-text">
+                <p class="text-name">
+                    Hi <span class="dash-name">{{ api.user.name }}!</span>
+                </p>
+                <p class="text-date">
+                    Last Login:
+                    <ng-container *ngIf="api.user.lastLogin === null; else lastLoginTemp">
+                        <span class="dash-date" style="letter-spacing: 1px">First Time Login</span>
+                    </ng-container>
+                    <ng-template #lastLoginTemp>
+                        <span class="dash-date">{{this.getDifference(api.user.lastLogin)}}</span>
+                    </ng-template>
+                </p>
+            </div>
+            <div class="dash-img-wrapper"><img src="assets/images/ema.png" alt="" /></div>
+        </div>
+    </section>
+
+    <!-- <h1 class="text-insight">INSIGHTS</h1>
+    <div class="row">
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ storedData.data.totalUsers }}</span>
+                <p class="user-data-titles">Total Users</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ storedData.data.totalUnreadRequests }}</span>
+                <p class="user-data-titles">Unread Contact Us Requests</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ storedData.data.totalStudents }}</span>
+                <p class="user-data-titles">Students Enrolled</p>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span *ngIf="storedData.data.totalAmountOwed < 0">-${{ storedData.data.totalAmountOwed * -1 | number: '1.2-2' }}</span>
+                <span *ngIf="storedData.data.totalAmountOwed >= 0">${{ storedData.data.totalAmountOwed | number: '1.2-2' }}</span>
+                <p class="user-data-titles">Total Amount Owed</p>
+            </div>
+        </div>
+    </div>
+    &nbsp;
+    <div class="row">
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ storedData.data.totalDeskManagers }}</span>
+                <p class="user-data-titles">Total Desk Managers</p>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4 d-flex">
+            <div class="col-md-0.3 side-bar"></div>
+            <div class="digits">
+                <span>{{ storedData.data.totalInstructors }}</span>
+                <p class="user-data-titles">Total Instructors</p>
+            </div>
+        </div>
+    </div> -->
+</div>

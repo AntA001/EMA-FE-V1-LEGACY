@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="container box" *ngIf="codeStatus === 'inProgress'">
+        <div class="dotEnimation">
+            <div class="downloadS">{{ lang.loggingInWait }}</div>
+            <div class="dot one">.</div>
+            <div class="dot two">.</div>
+            <div class="dot three">.</div>
+        </div>
+    </div>
+
+    <div class="container box" *ngIf="codeStatus === 'expire'">
+        <div class="heading1">{{ lang.logingFailed }}</div>
+    </div>
+</div>

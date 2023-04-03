@@ -1,0 +1,183 @@
+<h1 class="title">{{ lang.title }}</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="">
+    <div class="row">
+        <div class="col">
+            <label>{{ lang.labelTitle }}</label>
+            <input type="text" class="form-control" [(ngModel)]="searchKeyword" (ngModelChange)="searchKeywordChange($event)" placeholder="{{ lang.placeholder }}" />
+        </div>
+        <div class="col d-flex justify-content-between align-items-end">
+            <div class="btn-group" dropdown>
+                <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button" class="secondary" (click)="filters.page = 1; search()">
+                    {{ lang.search }}
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <button *ngIf="api.checkPermission('broadcast-message-send')" type="button" class="secondary" (click)="openModal(addContact, -1)">{{ lang.addBraod }}</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>{{ lang.titleHead }}</th>
+                    <th>{{ lang.category }}</th>
+                    <th>{{ lang.message }}</th>
+                    <th>{{ lang.broadcastedBy }}</th>
+                    <th>{{ lang.printDate }}</th>
+                    <th>{{ lang.sentAs }}</th>
+
+                    <th class="text-center" style="width: 250px">{{ lang.action }}</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+            <tbody *ngIf="broadcastMsgList.length > 0 && api.checkPermission('broadcast-message-list')">
+                <tr *ngFor="let d of broadcastMsgList | filter: searchKeyword; let i = index">
+                    <td>{{ d.title }}</td>
+                    <td *ngIf="d.category !== null && ts.currentLang === 'en'">{{ d.category.nameEN }}</td>
+                    <td *ngIf="d.category !== null && ts.currentLang === 'al'">{{ d.category.nameAL }}</td>
+                    <td *ngIf="d.category !== null && ts.currentLang === 'gr'">{{ d.category.nameEL }}</td>
+                    <td *ngIf="d.category !== null && ts.currentLang === 'bg'">{{ d.category.nameBG }}</td>
+                    <td *ngIf="d.category !== null && ts.currentLang === 'mk'">{{ d.category.nameMK }}</td>
+
+                    <td *ngIf="d.category == null">{{ lang.all }}</td>
+                    <td>{{ d.message }}</td>
+                    <td width="200px">
+                        <p>
+                            {{ d.sender?.name }}
+                            <br />
+                            {{ d.sender?.email }}
+                        </p>
+                    </td>
+                    <td>{{ this.getDifference(d.createdAt) }}</td>
+
+                    <td *ngIf="d.sms === true && d.notification === false">{{ lang.sentAsSMS }}</td>
+                    <td *ngIf="d.notification === true && d.sms === false">{{ lang.sentAsNotif }}</td>
+                    <td *ngIf="d.sms === true && d.notification === true" width="200px">{{ lang.sentAsBoth }}</td>
+                    <td *ngIf="d.sms === false && d.notification === false">-</td>
+
+                    <td >
+                        <div class="action-buttons">
+                            <div class="pl-1" *ngIf="d.template === true">
+                                <button class="sm info" type="button" (click)="openModal(addContact, i)">{{ lang.useAsTemplate }}</button>
+                            </div>
+                            <!-- <div class="pl-1">
+                                <button class="sm info" type="button" (click)="openModal(addContact,i)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </div> -->
+                            <div *ngIf="api.checkPermission('broadcast-message-delete')" class="pl-1">
+                                <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel, i)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                      
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="dataStatus === 'done' && broadcastMsgList.length === 0">
+                <tr>
+                    <td colspan="7">
+                        <app-no-data-found></app-no-data-found>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+</div>
+
+<ng-template #addContact>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="broadcastMsgForm" (ngSubmit)="saveContact(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">{{ lang.category }} <span class="mendatory">*</span></label>
+                    <select class="form-control mt-0" formControlName="category_id" [ngClass]="{ 'form-submitted': f.submitted }">
+                        <!--<option value='null' [disabled]="true">Select Category</option>-->
+                        <option value="">{{ lang.all }}</option>
+                        <option *ngFor="let ct of categoryTypeList" value="{{ ct._id }}">
+                            <p *ngIf="ts.currentLang === 'al'">{{ ct.nameAL }}</p>
+                            <p *ngIf="ts.currentLang === 'en'">{{ ct.nameEN }}</p>
+                            <p *ngIf="ts.currentLang === 'gr'">{{ ct.nameEL }}</p>
+                            <p *ngIf="ts.currentLang === 'bg'">{{ ct.nameBG }}</p>
+                            <p *ngIf="ts.currentLang === 'mk'">{{ ct.nameMK }}</p>
+                        </option>
+                    </select>
+
+                    <div *ngIf="ui.checkErrors(g.category_id, f)" class="errors">
+                        <p *ngIf="g.category_id.errors?.required">{{ lang.catReq }}</p>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <label class="mb-0">{{ lang.titleHead }} <span class="mendatory">*</span></label>
+                    <input formControlName="title" class="form-control mt-0" placeholder="{{ lang.placeholder }}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.title, f)" class="errors">
+                        <p *ngIf="g.title.errors?.required">{{ lang.titleRequired }}</p>
+                        {{ lang.message }}
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="mb-0">{{ lang.message }} <span class="mendatory">*</span></label>
+                    <textarea formControlName="message" cols="20" rows="5" class="form-control mt-0" placeholder="{{ lang.placeholderMessage }}" [ngClass]="{ 'form-submitted': f.submitted }"></textarea>
+                    <div *ngIf="ui.checkErrors(g.message, f)" class="errors">
+                        <p *ngIf="g.message.errors?.required">{{ lang.messageReq }}</p>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <div class="checkbox-container text-right">
+                        <label class="checkbox primary">
+                            <input type="checkbox" formControlName="notification" [ngClass]="{ 'form-submitted': f.submitted }" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <span class="text">{{ lang.sendNotification }}</span>
+                    </div>
+                    <div class="checkbox-container text-right">
+                        <label class="checkbox primary">
+                            <input type="checkbox" formControlName="sms" [ngClass]="{ 'form-submitted': f.submitted }" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <span class="text">{{ lang.sendSms }}</span>
+                    </div>
+                    <div class="checkbox-container text-right">
+                        <label class="checkbox primary">
+                            <input type="checkbox" formControlName="template" [ngClass]="{ 'form-submitted': f.submitted }" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <span class="text">{{ lang.saveAsTemplate }}</span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                {{ lang.save }}
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class="warning ml-1" (click)="cancelButton(f)">{{ lang.cancel }}</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>{{ lang.msg }}</h4>
+        <button type="button" class="dark" (click)="modalRef.hide()">{{ lang.no }}</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="danger ml-1" (click)="delete()">
+            {{ lang.yes }}
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>

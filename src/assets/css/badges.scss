@@ -1,0 +1,88 @@
+.i-badge {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    border-radius: 12px;
+    color: #fff;
+    padding: 1px 0;
+    padding-left: 20px;
+    padding-right: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.i-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border: 2px solid #fff;
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    border-radius: 50%;
+}
+
+.i-badge.lg::before {
+    width: 10px;
+    height: 10px;
+    top: 8px;
+}
+
+.i-badge.lg {
+    border-radius: 14px;
+    color: #fff;
+    width: auto;
+    padding: 3px 15px;
+    padding-left: 25px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.back-office-panel {
+    .i-badge.primary {
+        background: var(--ap-primary);
+    }
+
+    .i-badge.secondary {
+        background: var(--ap-secondary);
+    }
+
+    .i-badge.success {
+        background: var(--ap-success);
+    }
+
+    .i-badge.danger {
+        background: var(--ap-danger);
+    }
+
+    .i-badge.info {
+        background: var(--ap-info);
+    }
+
+    .i-badge.warning {
+        background: var(--ap-warning);
+    }
+
+    .i-badge.light {
+        background: var(--ap-light);
+    }
+
+    .i-badge.dark {
+        background: var(--ap-dark);
+    }
+}
+
+.website {
+    .i-badge.success {
+        background: #009234;;
+    }
+
+    .i-badge.danger {
+        background: #d51c28;
+    }
+
+    .i-badge.info {
+        background: #04a28c;
+    }
+}

@@ -1,0 +1,8 @@
+.table-responsive {
+    height: calc(100vh - 235px);
+}
+@media only screen and (max-width: 475px) {
+    input {
+        font-size: 11px;
+    }
+}

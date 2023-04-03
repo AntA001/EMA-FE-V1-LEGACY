@@ -1,0 +1,51 @@
+<header>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-xl">
+            <a class="navbar-brand" [routerLink]="['/']" routerLinkActive="active">
+                <img src="/assets/images/logo.png" class="logo" alt="img" /> <h3>EMA</h3>
+            </a>
+            <button [ngClass]="!isCollapsed ? 'cross' : ''" class="navbar-toggler collapsed" (click)="setCollapsed()" type="button" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault" [collapse]="isCollapsed" [isAnimated]="true">
+                <ul class="navbar-nav ml-auto">
+                    <!--
+                    <li class="nav-item">
+                        <a class="activeMenu" [routerLink]="['/']">{{ lang.home }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a [routerLink]="['/about-us']">{{ lang.aboutUs }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a [routerLink]="['/contact-us']">{{ lang.contactUs }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a [routerLink]="['/how-it-works']">{{ lang.howWorks }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <select [(ngModel)]="ts.currentLang" class="lang-dropdown" (change)="api.changeLanguage(ts.currentLang)">
+                            <option *ngFor="let lang of languages | keyvalue" [selected]="true" [value]="lang.key">{{ lang.key | uppercase }}&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                        </select>
+                    </li>
+                    -->
+                    <li class="nav-item portal-btn" >
+                        <a [routerLink]="['/privacy-policy']">{{ lang.privacyPolicy }}</a>
+                    </li>
+                    <li class="nav-item portal-btn" *ngIf="isAdmin">
+                        <a [routerLink]="['admin/dashboard']">{{ lang.portal }}</a>
+                    </li>
+                    <li class="nav-item portal-btn" *ngIf="isMunicipal">
+                        <a [routerLink]="['municipal/dashboard']">{{ lang.portal }}</a>
+                    </li>
+                    <li class="nav-item" *ngIf="!isAuthenticated">
+                        <a [routerLink]="['/login']">{{lang.login}} </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

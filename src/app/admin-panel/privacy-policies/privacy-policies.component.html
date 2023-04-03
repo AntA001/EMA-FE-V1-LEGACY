@@ -1,0 +1,9 @@
+<h1 class="title">Privacy Policies</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="table-responsive">
+    <div class="title-wrapper">
+        <h2 class="title"></h2>
+        <button class="primary ms-3 mt-2 mb-2" (click)="saveContent()" [disabled]="saveLoading" [ngClass]="saveLoading ? 'in-progress' : ''">Save <span></span><span></span><span></span></button>
+    </div>
+    <quill-editor [(ngModel)]="dataToSend.contentEn"></quill-editor>
+</div>

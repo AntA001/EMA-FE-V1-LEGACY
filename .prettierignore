@@ -1,0 +1,13 @@
+# Ignore directories:
+build
+dist
+src/assets
+
+# Ignore all HTML files:
+.spec.ts
+main.ts
+polyfills.ts
+test.ts
+package.json
+package-lock.json
+*.ico

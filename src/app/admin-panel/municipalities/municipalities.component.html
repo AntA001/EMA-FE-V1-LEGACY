@@ -1,0 +1,235 @@
+<h1 class="title">Municipalities</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+
+<div class="">
+    <div class="row">
+        <div class="col">
+            <label>Title</label>
+            <!-- <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Enter keyword to Search" /> -->
+            <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchKeywordChange($event)" placeholder="Enter Title to Search" />
+        </div>
+        <div class="col d-flex justify-content-between align-items-end">
+            <div class="btn-group" dropdown>
+                <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                    class="secondary" (click)="filters.page = 1; search()">
+                    Search
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <button type="button" class="secondary" (click)="openModal(addContact,-1)">Add New Municipality</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Native Name</th>
+                    <th>Maximun Sms Count</th>
+                    <th>Status</th>
+                    <th class="text-center" style="width: 250px;">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+            <tbody *ngIf="municipalitiesList.length > 0">
+                <tr *ngFor="let d of municipalitiesList ; let i = index">
+                    <td>{{ d.nameEN }}</td>
+                    <td>{{ d.nameAL }}</td>
+                    <td>{{ d.maxSmsCount }}</td>
+                    <td>
+                        <div *ngIf="d.status === 'inactive'" class="i-badge sm warning">inactive</div>
+                        <div *ngIf="d.status === 'active'" class="i-badge sm success">active</div>
+
+                    </td>
+                    <td class="d-flex justify-content-center align-items-center">
+                        <div class="pl-1">
+                            <button class="sm info" type="button" (click)="openModal(addContact,i)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        <!-- <div class="pl-1">
+                            <button class="danger sm" type="button" (click)="confirmDelModal(confirmDel,i)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div> -->
+                        <div class="pl-1">
+                            <button *ngIf="d.status == 'inactive'" type="button" class=" status-btn success "
+                                (click)="statusConfirmingModal(changeStatusActive,d._id,i,'active')"
+                                style="width: 110px;">Activate</button>
+                        </div>
+                        <div class="pl-1">
+                            <button *ngIf="d.status == 'active'" type="button" class=" status-btn danger"
+                                (click)="statusConfirmingModal(changeStatusDeactive,d._id,i,'inactive')"
+                                style="width: 110px;">Deactivate</button>
+                        </div>
+
+                        <div class="pl-1">
+                            <span class="themeCol2">
+                                <button type="button" class=" sm info"
+                                    (click)="showMunicipalities(d._id, d.nameEN)">Location Categories</button>
+                            </span>
+
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="dataStatus === 'done' && municipalitiesList.length === 0">
+                <tr>
+                    <td colspan="5">
+                        <app-no-data-found></app-no-data-found>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+</div>
+
+<ng-template #addContact>
+    <div class="modal-header">
+        <h4 class="modal-firstName pull-left">{{ modalTitle }}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="municipalityForm" (ngSubmit)="save(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-md-12 mb-2 mt-2">
+                    <div class="photo_upload">
+                        <label>
+                            <input type="file" id="thubnail-file"
+                                (change)="openThumbnailModal($event, thumbnailModal)" />
+                            <div class="upload_photo cg " (click)="browseThumbnailImage()">
+                                <label class="custom-file-upload" *ngIf="thumbnailImage === ''">
+                                    <img [defaultImage]="spinnerSVG"
+                                        [lazyLoad]="ds.newsImageUrl(this.ds.municipalityId,this.ds.municipalityUpdate)"
+                                        alt="Image Not Found" border-radius="10%" />
+                                </label>
+                                <img class="thumbnail-image" *ngIf="thumbnailImage !== ''" [src]="thumbnailImage"
+                                    border-radius="10%" />
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Name<span class="mendatory">*</span></label>
+                    <input type="text" formControlName="nameEN" class="form-control mt-0" placeholder="Enter Name"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.nameEN, f)" class="errors">
+                        <p *ngIf="g.nameEN.errors?.required">NameEN is required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Native Name</label>
+                    <input type="text" formControlName="nameAL" class="form-control mt-0" placeholder="Enter Native Name"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0"> Maximum SMS Count <span class="mendatory">*</span></label>
+                    <input type="number" formControlName="max_sms_count" class="form-control mt-0"
+                        placeholder="Enter Maximum  SMS Count " [ngClass]="{ 'form-submitted': f.submitted }" />
+                    <div *ngIf="ui.checkErrors(g.max_sms_count, f)" class="errors">
+                        <p *ngIf="g.max_sms_count.errors?.required">Maximum SMS Count is required</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Facebook Link </label>
+                    <input formControlName="facebookLink" class="form-control mt-0" placeholder="Enter Facebook Link"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Web Link </label>
+                    <input formControlName="webLink" class="form-control mt-0" placeholder="Enter Web Link"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Twitter Link </label>
+                    <input formControlName="twitterLink" class="form-control mt-0" placeholder="Enter Twitter Link"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Instagram Link </label>
+                    <input formControlName="instagramLink" class="form-control mt-0" placeholder="Enter Instagram Link"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="mb-0">Youtube Link </label>
+                    <input formControlName="youtubeLink" class="form-control mt-0" placeholder="Enter Youtube Link"
+                        [ngClass]="{ 'form-submitted': f.submitted }" />
+                </div>
+            </div>
+            <button type="submit" class="primary" [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }">
+                Save
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" class=" warning ml-1" (click)="cancelButton(f)">Cancel</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #confirmDel>
+    <div class="modal-body text-center">
+        <h4>Do you want to Delete?</h4>
+        <button type="button" class="danger " (click)="modalRef.hide()">No</button>
+        <button [disabled]="waiting.save" [ngClass]="{ 'in-progress': waiting.save }" type="button" class="primary ml-1"
+            (click)="delete()">
+            Yes
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #changeStatusActive>
+    <div class="modal-body text-center">
+        <h2 class="primary">Confirmation</h2>
+        <h4>Are you sure that you want change the status to active?</h4>
+        <button type="button" class="danger sm " (click)="modalRef.hide()">No</button>
+        <button type="button" class=" primary sm ml-1" (click)="changeStatusAct()"
+            [disabled]="waiting.userStatus[this.selectedIndex]"
+            [ngClass]="waiting.userStatus[this.selectedIndex]?'in-progress':''">
+            <div class="loading-dots">Yes
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+</ng-template>
+<ng-template #changeStatusDeactive>
+    <div class="modal-body text-center">
+        <h2 class="primary">Confirmation</h2>
+        <h4>Are you sure that you want change the status to inactive?</h4>
+        <button type="button" class=" danger sm btn-mr" (click)="modalRef.hide()">No</button>
+        <button type="button" class=" primary sm ml-1" (click)="changeStatusInact()"
+            [disabled]="waiting.userStatus[this.selectedIndex]"
+            [ngClass]="waiting.userStatus[this.selectedIndex]?'in-progress':''">
+            <div class="loading-dots">Yes
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #thumbnailModal>
+    <div class="modal-header">
+        <h5 class="modal-title">Choose Image</h5>
+    </div>
+
+    <div class="modal-body">
+        <image-cropper [imageChangedEvent]="thmbnailChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+            format="png" (imageCropped)="croppedThumbnail = $event.base64"></image-cropper>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="cg primary lg-1" (click)="cropComplete()">Save</button>
+        <button type="button" class="cg warning lg-1" (click)="thumbnailModalRef.hide()">Cancel</button>
+
+    </div>
+</ng-template>

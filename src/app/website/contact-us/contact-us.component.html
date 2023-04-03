@@ -1,0 +1,65 @@
+<div class="contact-us section">
+    <div class="contact-us-container">
+        <div class="contact-us-heading-content mt-4 mb-3">
+            <h1 class="contact-us-heading">{{ lang.contactUs }}</h1>
+        </div>
+        <div class="contact-us-form-content">
+            <ng-container *ngIf="formSuccess === false">
+                <div class="contact-us-form">
+                    <form [formGroup]="dataForm" (ngSubmit)="submitForm()" #f="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <label class="mb-0 mt-0">{{ lang.name }} <span class="mendatory">*</span></label>
+                                <input formControlName="name" class="form-control mt-0 cg-input" type="text" placeholder="{{ lang.enterYour }} {{ lang.name }}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                                <div class="errors" *ngIf="ui.checkErrors(g.name, f)">
+                                    <p *ngIf="g.name.errors?.required">{{ lang.name }} {{ lang.isRequire }}</p>
+                                    <p *ngIf="g.name.errors?.maxlength">{{ lang.MaxChar }} {{ g.name.errors?.maxlength.requiredLength }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="mb-0 mt-0">{{ lang.email }} <span class="mendatory">*</span></label>
+                                <input formControlName="email" class="form-control mt-0 cg-input" type="text" placeholder="{{ lang.enterYour }} {{ lang.email }}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                                <div class="errors" *ngIf="ui.checkErrors(g.email, f)">
+                                    <p *ngIf="g.email.errors?.required">{{ lang.email }} {{ lang.isRequire }}</p>
+                                    <p *ngIf="g.email.errors?.email">{{ lang.enterValidEmail }}</p>
+                                    <p *ngIf="g.email.errors?.maxlength">{{ lang.MaxChar }} {{ g.email.errors?.maxlength.requiredLength }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="mb-0 mt-0">{{ lang.phoneNum }} <span class="mendatory">*</span></label>
+                                <input formControlName="phone" class="form-control mt-0 cg-input" type="text" placeholder="{{ lang.enterYour }} {{ lang.phoneNum }}" [ngClass]="{ 'form-submitted': f.submitted }" />
+                                <div class="errors" *ngIf="ui.checkErrors(g.phone, f)">
+                                    <p *ngIf="g.phone.errors?.required">{{ lang.phoneNum }} {{ lang.isRequire }}</p>
+                                    <p *ngIf="g.phone.errors?.maxlength">{{ lang.MaxChar }} {{ g.phone.errors?.maxlength.requiredLength }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <label class="mb-0 mt-0">{{ lang.typeMsg }} <span class="mendatory">*</span></label>
+                                <textarea formControlName="message" class="form-control mt-0 cg-textarea" type="text" placeholder="{{ lang.enterYour }} {{ lang.msg }}" rows="4" [ngClass]="{ 'form-submitted': f.submitted }"></textarea>
+                                <div class="errors" *ngIf="ui.checkErrors(g.message, f)">
+                                    <p *ngIf="g.message.errors?.required">{{ lang.msg }} {{ lang.isRequire }}</p>
+                                    <p *ngIf="g.message.errors?.maxlength">{{ lang.MaxChar }} {{ g.message.errors?.maxlength.requiredLength }}</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-2 mb-4 contact-us-form-btn">
+                                <button [disabled]="loadingStatus" class="primary" [ngClass]="loadingStatus ? 'in-progress' : ''">
+                                    {{ lang.sendMsg }}
+                                    <div class="loading-dots"><span></span><span></span><span></span></div>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="formSuccess === true">
+                <div class="contact-us-success">
+                    <h2>Thanks for Contacting!!</h2>
+                    <p>You message have been sent to the concerns. Our team will contact you soon.</p>
+                </div>
+            </ng-container>
+            <p [innerHTML]="contents | safeHtml" *ngIf="!contentLoadingStatus"></p>
+            <app-component-loader *ngIf="contentLoadingStatus"></app-component-loader>
+        </div>
+    </div>
+</div>

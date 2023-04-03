@@ -1,0 +1,157 @@
+<h1 class="title">{{lang.title}}</h1>
+<app-breadcrums [data]="breadCrum"></app-breadcrums>
+<div class="row">
+    <div class="col">
+        <label>{{lang.name}}</label>
+        <input type="text" class="form-control" [(ngModel)]="searchKeyword"
+            (ngModelChange)="searchKeywordChange($event)" placeholder="{{lang.placeName}}" />
+    </div>
+    <div class="col d-flex justify-content-between align-items-end">
+        <div class="btn-group" dropdown>
+            <button [disabled]="waiting.search" [ngClass]="waiting.search ? 'in-progress' : ''" type="button"
+                class="secondary" (click)="filters.page = 1; search()">
+                {{lang.search}}
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>{{lang.userName}}</th>
+                <th>{{lang.email}}</th>
+                <th>{{lang.phoneNo}}</th>
+                <th>{{lang.category}}</th>
+                <th>{{lang.municipality}}</th>
+                <th>{{lang.country}}</th>
+                <th>{{lang.type}}</th>
+                <th>{{lang.printDate}}</th>
+
+                <th class="text-center">{{lang.action}}</th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="dataStatus === 'fetching'" [appSkeletonTabelLoader]="loaderOptions"></tbody>
+        <tbody *ngIf="sosList.length > 0 && api.checkPermission('sos-alert-list')">
+            <tr *ngFor="let d of sosList | filter:searchKeyword; let i = index" [class.new]="d.new">
+
+                <td>{{ d.user.name }}</td>
+                <td>{{ d.user.email }}</td>
+                <td>{{ d.user.phoneNo}}</td>
+                <td *ngIf="ts.currentLang === 'en'">{{ d.user.category.nameEN }}</td>
+                <td *ngIf="ts.currentLang === 'al'">{{ d.user.category.nameAL }}</td>
+                <td *ngIf="ts.currentLang === 'gr'">{{ d.user.category.nameEL }}</td>
+                <td *ngIf="ts.currentLang === 'bg'">{{ d.user.category.nameBG }}</td>
+                <td *ngIf="ts.currentLang === 'mk'">{{ d.user.category.nameMK }}</td>
+                <td *ngIf="ts.currentLang === 'en'">{{ d.user.municipality.nameEN }}</td>
+                <td *ngIf="ts.currentLang !== 'en'">{{ d.user.municipality.nameAL }}</td>
+                <td *ngIf="ts.currentLang === 'en'">{{ d.user.municipality.country.nameEN }}</td>
+                <td *ngIf="ts.currentLang !== 'en'">{{ d.user.municipality.country.nameAL }}</td>
+                <td>
+                    <p *ngIf="d.type">
+                        {{sosType(d.type)}}
+                    </p>
+                    <p *ngIf="!d.type">
+                        -
+                    </p>
+                </td>
+
+
+                <td>{{this.getDifference(d.createdAt)}}</td>
+
+                <td class="d-flex">
+                    <div class="col-12 row">
+                        <div *ngIf="api.checkPermission('sos-alert-info')" class="d-flex col-8 justify-content-center">
+                            <button class="sm info" type="button" (click)="openModal(userDetail, i)">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                        <div class="pl-1 col-2 justify-content-end" *ngIf="d.new">
+                            <div class="i-badge success">new</div>
+                        </div>
+                    </div>
+                  
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody *ngIf="dataStatus === 'done' && sosList.length === 0">
+            <tr>
+                <td colspan="9">
+                    <app-no-data-found></app-no-data-found>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- <app-ipagination [pagination]="pagination" [activePage]="filters.page" (pageChangeEvent)="setPagination($event)" *ngIf="dataStatus === 'done'"></app-ipagination> -->
+
+<ng-template #userDetail>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{lang.userDetail}}</h4>
+        <button type="button" class="close pull-right" (click)="modalRef.hide()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.userName}}</h4>
+                <p>{{this.sosList[selectedIndex].user.name}}</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.email}}</h4>
+                <p>{{this.sosList[selectedIndex].user.email}}</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.phoneNo}}.</h4>
+                <p>{{this.sosList[selectedIndex].user.phoneNo}}</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.category}}</h4>
+                <p *ngIf="ts.currentLang === 'en'">{{this.sosList[selectedIndex].user.category.nameEN}}</p>
+                <p *ngIf="ts.currentLang === 'al'">{{this.sosList[selectedIndex].user.category.nameAL}}</p>
+                <p *ngIf="ts.currentLang === 'gr'">{{this.sosList[selectedIndex].user.category.nameEL}}</p>
+                <p *ngIf="ts.currentLang === 'bg'">{{this.sosList[selectedIndex].user.category.nameBG}</p>
+                <p *ngIf="ts.currentLang === 'mk'">{{this.sosList[selectedIndex].user.category.nameMK</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.municipality}}</h4>
+                <p *ngIf="ts.currentLang === 'en'">{{this.sosList[selectedIndex].user.municipality.nameEN}}</p>
+                <p *ngIf="ts.currentLang !== 'en'">{{this.sosList[selectedIndex].user.municipality.nameAL}}</p>
+
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.country}}</h4>
+                <p *ngIf="ts.currentLang === 'en'">{{this.sosList[selectedIndex].user.municipality.country.nameEN}}</p>
+                <p *ngIf="ts.currentLang !== 'en'">{{this.sosList[selectedIndex].user.municipality.country.nameAL}}</p>
+
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.lat}}</h4>
+                <p>{{this.sosList[selectedIndex].lat}}</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.lng}}</h4>
+                <p>{{this.sosList[selectedIndex].lng}}</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title primary">{{lang.type}}</h4>
+                <p *ngIf="this.sosList[selectedIndex].type">
+                    {{sosType(this.sosList[selectedIndex].type)}}
+                </p>
+                <p *ngIf="!this.sosList[selectedIndex].type">
+                    -
+                </p>
+            </div>
+            <div class="col-md-12">
+                <div id="map"></div>
+            </div>
+
+        </div>
+    </div>
+</ng-template>

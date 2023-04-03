@@ -1,0 +1,45 @@
+.signin-container {
+    min-height: 95.2vh;
+    background-color: #fff;
+    position: relative;
+    padding-top: 50px;
+}
+.signin-section {
+    width: 100%;
+    max-width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    border: 1px solid #00000063;
+    border-radius: 8px;
+}
+.signin-inner {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+}
+.signin-heading {
+    text-align: center;
+}
+.img-wrapper img {
+    width: 40px;
+}
+.signin-heading .title {
+    color: var(--ap-primary);
+    font-size: 30px;
+    margin: 0 0 5px 0;
+}
+.signin-heading .title-desc {
+    font-size: 15px;
+    color: var(--ap-secondary);
+}
+a.login {
+    width: 100%;
+    margin: 0;
+    background-color: var(--ap-primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+}

@@ -1,0 +1,16 @@
+.contact-us.section {
+    /* padding: 95px 0 0 0; */
+}
+.contact-us-heading {
+    text-align: center;
+    color: var(--ap-primary);
+    font-weight: bold;
+    font-size: 40px;
+}
+.contact-us-heading-content p {
+    width: 90%;
+    margin: 0 auto;
+}
+p{
+    color: var(--ap-primary)
+}

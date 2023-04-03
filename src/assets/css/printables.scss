@@ -1,0 +1,41 @@
+.back-office-panel {
+    .print-me {
+        display: none !important;
+    }
+
+    @media only print {
+        .no-print-me {
+            display: none !important;
+        }
+        .print-me {
+            display: block !important;
+        }
+    }
+
+    .report .header {
+        display: flex;
+        align-items: center;
+        margin: 0;
+
+        img {
+            width: 150px;
+        }
+
+        h2 {
+            padding-top: 15px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .time {
+            margin: 0;
+            font-size: 11px;
+        }
+    }
+}

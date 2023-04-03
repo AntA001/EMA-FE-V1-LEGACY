@@ -1,0 +1,37 @@
+:host {
+    --font-size: 12px;
+    --font-color: #fff;
+    --button-color: var(--ap-secondary);
+}
+.pagination-wrapper {
+    overflow-x: auto;
+}
+.pagination-wrapper.sameline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+ul.pagination {
+    margin-bottom: 0px !important;
+    flex-shrink: 0;
+}
+ul.pagination li.page-item {
+    flex-shrink: 0;
+}
+.page-item.active .page-link {
+    background: var(--button-color);
+    border-color: var(--button-color);
+}
+.page-link {
+    color: var(--button-color);
+    padding: 0.2rem 0.5rem;
+    font-size: var(--font-size);
+}
+.page-link:hover {
+    background: var(--button-color);
+    border-color: var(--button-color);
+    color: var(--font-color);
+}
+.page-link:focus {
+    box-shadow: none;
+}

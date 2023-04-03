@@ -1,0 +1,31 @@
+/* * * * * * * * *  * * * * * * * * *
+ * This file is used to add fonts from files
+ * * * * * * * * * ** * * * * * * * */
+@font-face {
+    font-family: nexa;
+    src: url("/assets/fonts/Nexa Bold.otf");
+}
+
+@font-face {
+    font-family: tinkov;
+    src: url("/assets/fonts/TinkovRegular.otf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: tinkov;
+    src: url("/assets/fonts/TinkovLight.otf");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: tinkov;
+    src: url("/assets/fonts/TinkovBold.otf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: oldSportAthletic;
+    src: url("/assets/fonts/OldSportAthletic.ttf");
+    font-weight: bold;
+}

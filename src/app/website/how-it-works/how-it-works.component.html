@@ -1,0 +1,9 @@
+<div class="contact-us section">
+    <div class="contact-us-container">
+        <div class="contact-us-heading-content mt-4 mb-3">
+            <h1 class="contact-us-heading">{{ lang.howWorks }}</h1>
+            <p *ngIf="!loadingStatus" [innerHTML]="contents | safeHtml"></p>
+            <app-component-loader *ngIf="loadingStatus"></app-component-loader>
+        </div>
+    </div>
+</div>

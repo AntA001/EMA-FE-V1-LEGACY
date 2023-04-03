@@ -1,0 +1,141 @@
+.signin-container {
+    background-color: var(--ap-secondary);
+    padding: 120px 0 20px 0;
+}
+.signin-inner {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px 19px;
+    width: 40%;
+    margin: auto;
+}
+.signin-heading {
+    text-align: center;
+}
+.signin-heading .title {
+    color: var(--ap-secondary);
+    font-size: 30px;
+    margin: 0 0 5px 0;
+}
+.signin-heading .title-desc {
+    font-size: 15px;
+}
+.radio {
+    margin-left: 10px !important;
+    margin-bottom: 10px;
+}
+.email-wrapper,
+.password-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 15px 0;
+}
+.email-wrapper label,
+.password-wrapper label {
+    font-weight: 400;
+}
+button.login {
+    width: 100%;
+    margin: 0;
+    background-color: var(--ap-secondary);
+    color: #484848;
+    font-weight: 300;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    padding: 8px;
+    border-radius: 5px;
+}
+.forgot-wrapper {
+    margin: 0 0 15px 0;
+}
+.row {
+    margin-right: -15px;
+    margin-left: 5px;
+}
+a {
+    text-align: center;
+    display: block;
+    font-size: 12px;
+    margin-top: 10px;
+}
+input[type="radio"] {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    outline: none;
+    box-shadow: 0 0 5px 0px gray inset;
+    margin: 0 0 0 -28px;
+}
+input[type="radio"]:hover {
+    box-shadow: 0 0 5px 0px var(--ap-secondary) inset;
+}
+input[type="radio"]:before {
+    content: "";
+    display: block;
+    width: 60%;
+    height: 60%;
+    margin: 20% auto;
+    border-radius: 50%;
+}
+input[type="radio"]:checked:before {
+    background: var(--ap-secondary);
+}
+.agree_terms {
+    text-align: center;
+    width: 100%;
+    margin: 20px auto 0;
+}
+.agree_terms a {
+    color: var(--ap-secondary);
+    font-weight: 600;
+}
+.agree_terms .form-check {
+    background: transparent;
+}
+.agree_terms [type="checkbox"]:checked + label:before {
+    border: 1px solid var(--ap-secondary) !important;
+}
+@media only screen and (max-width: 1024px) {
+    .logo-section img {
+        width: 18%;
+    }
+    .signin-section {
+        width: 40%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .logo-section img {
+        width: 22%;
+    }
+    .signin-section {
+        width: 100%;
+    }
+    .signin-inner {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px 19px;
+        width: 100%;
+        margin: auto;
+    }
+}
+@media only screen and (max-width: 425px) {
+    .logo-section img {
+        width: 50%;
+    }
+    .signin-inner {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px 19px;
+        width: 100%;
+        margin: auto;
+    }
+    .reg-img-wrapper img {
+        width: 100%;
+    }
+    .banner-text {
+        bottom: 0;
+        left: 0;
+    }
+}
